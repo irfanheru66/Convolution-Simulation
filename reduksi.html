@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Economica:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
-    <link href="css/nav.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/styles.css">
     <style>
         .dropdown-xl .dropdown-menu {
@@ -31,9 +31,11 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-transparent navbar-light fixed-top" id="navbar">
+    <nav class="navbar navbar-expand-lg bg-transparent navbar-light" id="navbar">
         <div class="container px-5">
-            <a class="navbar-brand text-primary" href="index.html">VolugeSim</a>
+            <a class="navbar-brand text-primary" href="index.html">
+                <img src="assets/img/new/VolugeSIMLogo (1).png" width="120px" height="120px" alt="">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -131,11 +133,91 @@
             </div>
         </div>
     </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Input Image
+                    </div>
+                    <div class="card-body">
+                        <p id="status">OpenCV.js is loading...</p>
+                        <form action="">
+                            <input type="file" id="fileInput" name="file" class="custom-file-input">
+                        </form>
+                        <div class="icon">
+                            <i class="bi bi-zoom-in"></i>
+                            <i class="bi bi-zoom-out"></i>
+                            <i class="bi bi-aspect-ratio"></i>
+                        </div>
+                        <div class="image">
+                            <!-- <img src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="img-fluid" alt=""> -->
+                            <img id="imageSrc" class="img-fluid" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Process
+                    </div>
+                    <div class="card-body">
+                            <select name="noise" id="filter" class="form-control" id="">
+                                <option value="">-Select Filter-</option>
+                                <option value="Gaussian">Gaussian Filter</option>
+                                <option value="Mean">Mean Filter</option>
+                            </select>
+                            <div class="form-group">
+                                <label for="">Kernel Size</label>
+                                <div class="d-flex">
+                                    <div class="kernel">
+                                        <span id="demo"></span>
+                                    </div>
+                                    <div class="w-100 ps-2 mt-2">
+                                        <input type="range" name="range" min="3" max="11" value="3" class="slider"
+                                            id="myRange">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column-reverse mt-5">
+                                <div class="ms-auto">
+                                    <button class="btn btn-submit px-5 btn-primary" id="apply">Apply</button>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Output Image
+                    </div>
+                    <div class="card-body">
+                        <div class="icon">
+                            <i class="bi bi-zoom-in"></i>
+                            <i class="bi bi-zoom-out"></i>
+                            <i class="bi bi-aspect-ratio"></i>
+                        </div>
+                        <div class="image">
+                            <!-- <img src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="img-fluid" alt=""> -->
+                            <canvas id="canvasOutput" class="img-fluid"></canvas>
+                        </div>
+                        <div class="d-flex flex-column-reverse mt-5">
+                            <div class="ms-auto">
+                                <a class="btn btn-submit px-5 btn-primary">Watch How It Works </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script type="text/javascript">
         window.addEventListener('DOMContentLoaded', event => {
             // Activate Bootstrap scrollspy for the sticky nav component
@@ -150,7 +232,8 @@
             // Collapse Navbar
             // Add styling fallback for when a transparent background .navbar-marketing is scrolled
             var navbarCollapse = function () {
-                const navbarMarketingTransparentFixed = document.body.querySelector('.navbar-marketing.bg-transparent.fixed-top');
+                const navbarMarketingTransparentFixed = document.body.querySelector(
+                    '.navbar-marketing.bg-transparent.fixed-top');
                 if (!navbarMarketingTransparentFixed) {
                     return;
                 }
@@ -167,38 +250,63 @@
             document.addEventListener('scroll', navbarCollapse);
 
         });
-
-        // let imgElement = document.getElementById('imageSrc');
-        // let inputElement = document.getElementById('fileInput');
-        // var slider = document.getElementById("myRange");
-        // slider.step = 2;
-        // var output = document.getElementById("demo");
-        // output.innerHTML = slider.value;
-
-        // let sliderVal = Number(slider.value);
-        // slider.oninput = function () {
-        //     output.innerHTML = this.value;
-        //     sliderVal = Number(this.value);
-        // }
-        // inputElement.addEventListener('change', (e) => {
-        //     imgElement.src = URL.createObjectURL(e.target.files[0]);
-        // }, false);
-        // imgElement.onload = function () {
-        //     let src = cv.imread(imgElement);
-        //     let dst = new cv.Mat();
-        //     let M = cv.Mat.eye(3, 3, cv.CV_32FC1);
-        //     let ksize = new cv.Size(sliderVal, sliderVal);
-
-        //     cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
-        //     cv.imshow('canvasOutput', dst);
-        //     src.delete(); dst.delete(); M.delete();
-        // };
-        // function onOpenCvReady() {
-        //     document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
-        // }
     </script>
-    <script async src="https://docs.opencv.org/4.5.2/opencv.js" onload="onOpenCvReady();"
-        type="text/javascript"></script>
+    <script type="text/javascript">
+        let imgElement = document.getElementById('imageSrc');
+        let inputElement = document.getElementById('fileInput');
+        let filter = document.getElementById("filter");
+        var slider = document.getElementById("myRange");
+        slider.step = 2;
+        let apply = document.getElementById("apply");
+        var output = document.getElementById("demo");
+        output.innerHTML = "" + slider.value + "x" + slider.value;
+
+        let sliderVal = Number(slider.value);
+        slider.oninput = function () {
+            output.innerHTML = "" + this.value + "x" + this.value;
+            sliderVal = Number(this.value);
+        }
+        inputElement.addEventListener('change', (e) => {
+            imgElement.src = URL.createObjectURL(e.target.files[0]);
+        }, false);
+        let dst, src, M;
+
+        let filterName = "";
+        filter.addEventListener("change", function (e) {
+            e.preventDefault()
+            src = cv.imread(imgElement);
+            dst = new cv.Mat();
+            M = cv.Mat.eye(3, 3, cv.CV_32FC1);
+            let ksize = new cv.Size(sliderVal, sliderVal);
+            if (filter.value === "Gaussian") {
+                filterName = "Gaussian"
+                cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
+                console.log("Gaussian")
+            }else if(filter.value === "Mean"){
+                filterName = "Mean"
+                cv.blur(src, dst, ksize, new cv.Point(-1, -1), cv.BORDER_DEFAULT)
+                console.log("Mean")
+            }
+        });
+
+        apply.addEventListener('click', (e) => {
+            e.preventDefault()
+            if(filterName !== "" || filterName === null){
+                cv.imshow('canvasOutput', dst);
+                src.delete();
+                dst.delete();
+                M.delete();
+            }else{
+                alert("Select Filter!")
+            }
+        })
+
+        function onOpenCvReady() {
+            document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+        }
+    </script>
+    <script async src="https://docs.opencv.org/4.5.2/opencv.js" onload="onOpenCvReady();" type="text/javascript">
+    </script>
 </body>
 
 </html>
