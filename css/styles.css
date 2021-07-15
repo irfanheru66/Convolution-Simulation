@@ -216,6 +216,14 @@ a.dropdown-item {
     font-size: 25px;
 }
 
+.icon i {
+    margin: 0 3px;
+}
+
+#status {
+    color: #fff;
+}
+
 div.image {
     margin-top: 10px;
 }
