@@ -165,8 +165,9 @@
                     <div class="card-body">
                         <select name="noise" id="filter" class="form-control" id="">
                             <option value="">-Select Filter-</option>
-                            <option value="Gaussian">Gaussian Filter</option>
-                            <option value="Mean">Mean Filter</option>
+                            <option value="Gaussian">Kernel 1</option>
+                            <option value="Mean">Kernel 2</option>
+                            <option value="Mean">Custom Kernel</option>
                         </select>
                         <div class="form-group">
                             <label for="">Kernel Size</label>
@@ -272,23 +273,23 @@
         }, false);
         let dst, src, M;
 
-        let filterName = "";
-        filter.addEventListener("change", function (e) {
-            e.preventDefault()
-            src = cv.imread(imgElement);
-            dst = new cv.Mat();
-            M = cv.Mat.eye(3, 3, cv.CV_32FC1);
-            let ksize = new cv.Size(sliderVal, sliderVal);
-            if (filter.value === "Gaussian") {
-                filterName = "Gaussian"
-                cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
-                console.log("Gaussian")
-            } else if (filter.value === "Mean") {
-                filterName = "Mean"
-                cv.blur(src, dst, ksize, new cv.Point(-1, -1), cv.BORDER_DEFAULT)
-                console.log("Mean")
-            }
-        });
+        // let filterName = "";
+        // filter.addEventListener("change", function (e) {
+        //     e.preventDefault()
+        //     src = cv.imread(imgElement);
+        //     dst = new cv.Mat();
+        //     M = cv.Mat.eye(3, 3, cv.CV_32FC1);
+        //     let ksize = new cv.Size(sliderVal, sliderVal);
+        //     if (filter.value === "Gaussian") {
+        //         filterName = "Gaussian"
+        //         cv.GaussianBlur(src, dst, ksize, 0, 0, cv.BORDER_DEFAULT);
+        //         console.log("Gaussian")
+        //     } else if (filter.value === "Mean") {
+        //         filterName = "Mean"
+        //         cv.blur(src, dst, ksize, new cv.Point(-1, -1), cv.BORDER_DEFAULT)
+        //         console.log("Mean")
+        //     }
+        // });
 
         apply.addEventListener('click', (e) => {
             e.preventDefault()
