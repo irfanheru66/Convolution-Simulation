@@ -168,6 +168,7 @@
                                 <option value="Canny">Canny Edge Detection</option>
                                 <option value="Sobel">Sobel Edge Detection</option>
                                 <option value="Prewitt">Prewitt Edge Detection</option>
+                                <option value="Scharr">Scharr Edge Detection</option>
                                 <option value="Laplacian">Laplacian Filter</option>
                             </select>
                             <div class="d-flex flex-column-reverse mt-5">
@@ -299,6 +300,16 @@
                 filterName = "Laplacian"
                 cv.Laplacian(src, dst, cv.CV_8U, 1);
                 //console.log("Canny")
+            }else if(filter.value === "Scharr"){
+                filterName = "Scharr"
+                dstx = new cv.Mat();
+                dsty = new cv.Mat();
+                cv.Scharr(src, dstx, cv.CV_8U, 1, 0, 1, 0, cv.BORDER_DEFAULT);
+                cv.Scharr(src, dsty, cv.CV_8U, 0, 1, 1, 0, cv.BORDER_DEFAULT);
+                //console.log("Mean")
+                cv.convertScaleAbs(dstx, dstx);
+                cv.convertScaleAbs(dsty, dsty);
+                cv.addWeighted(dstx, 0.5, dsty, 0.5, 0, dst);
             }
         });
 
