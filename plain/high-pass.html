@@ -1,0 +1,309 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Convolution Simulation Image</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Economica:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css">
+    <style>
+        .dropdown-xl .dropdown-menu {
+            min-width: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-transparent navbar-light" id="navbar">
+        <div class="container">
+            <a class="navbar-brand text-primary" href="index.html">
+                <img src="assets/img/new/VolugeSIMLogo (1).png" width="120px" height="120px" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="feather feather-menu">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto me-lg-5">
+                    <li class="nav-item dropdown dropdown-xl no-caret">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Features
+                            <i class="fas fa-chevron-right dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end animated--fade-in-up"
+                            aria-labelledby="navbarDropdownDemos">
+                            <div class="row g-0">
+                                <div class="col-lg-12 ps-5 pe-5 pt-3 pb-3">
+                                    <a class="dropdown-item" style="font-size: 25px;" href="page-basic.html">Noise
+                                        Reduction</a>
+                                    <a class="dropdown-item" style="font-size: 25px;"
+                                        href="page-company-about.html">High-Pass Filter</a>
+                                    <a class="dropdown-item" style="font-size: 25px;"
+                                        href="page-company-pricing.html">Edge Detection</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown no-caret">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Documentation
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end animated--fade-in-up"
+                            aria-labelledby="navbarDropdownDocs">
+                            <a class="dropdown-item py-3"
+                                href="https://docs.startbootstrap.com/sb-ui-kit-pro/quickstart" target="_blank">
+                                <div class="icon-stack bg-primary-soft text-primary me-4"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-book-open">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                    </svg></div>
+                                <div>
+                                    <div class="small text-gray-500">Documentation</div>
+                                    Usage instructions and reference
+                                </div>
+                            </a>
+                            <div class="dropdown-divider m-0"></div>
+                            <a class="dropdown-item py-3"
+                                href="https://docs.startbootstrap.com/sb-ui-kit-pro/components" target="_blank">
+                                <div class="icon-stack bg-primary-soft text-primary me-4"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-code">
+                                        <polyline points="16 18 22 12 16 6"></polyline>
+                                        <polyline points="8 6 2 12 8 18"></polyline>
+                                    </svg></div>
+                                <div>
+                                    <div class="small text-gray-500">Components</div>
+                                    Code snippets and reference
+                                </div>
+                            </a>
+                            <div class="dropdown-divider m-0"></div>
+                            <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-ui-kit-pro/changelog"
+                                target="_blank">
+                                <div class="icon-stack bg-primary-soft text-primary me-4"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-file-text">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg></div>
+                                <div>
+                                    <div class="small text-gray-500">Changelog</div>
+                                    Updates and changes
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <a class="btn fw-500 ms-lg-4 btn-lg btn-primary" href="#">
+                            Feedback
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Input Image
+                    </div>
+                    <div class="card-body">
+                        <p id="status">OpenCV.js is loading...</p>
+                        <form action="">
+                            <input type="file" id="fileInput" name="file" class="custom-file-input">
+                        </form>
+                        <div class="icon">
+                            <i class="bi bi-zoom-in"></i>
+                            <i class="bi bi-zoom-out"></i>
+                            <i class="bi bi-aspect-ratio"></i>
+                        </div>
+                        <div class="image">
+                            <!-- <img src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="img-fluid" alt=""> -->
+                            <img id="imageSrc" class="img-fluid" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Process
+                    </div>
+                    <div class="card-body">
+                        <select name="noise" id="filter" class="form-control" id="">
+                            <option value="">-Select Filter-</option>
+                            <option value="Laplacian">Laplacian</option>
+                        </select>
+                        <div class="form-group">
+                            <label for="">Kernel Size</label>
+                            <div class="d-flex">
+                                <div class="kernel">
+                                    <span id="demo"></span>
+                                </div>
+                                <div class="w-100 ps-2 mt-2">
+                                    <input type="range" name="range" min="3" max="11" value="3" class="slider"
+                                        id="myRange">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column-reverse mt-5">
+                            <div class="ms-auto">
+                                <button class="btn btn-submit px-5 btn-primary" id="apply">Apply</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        Output Image
+                    </div>
+                    <div class="card-body">
+                        <div class="icon">
+                            <i class="bi bi-zoom-in"></i>
+                            <i class="bi bi-zoom-out"></i>
+                            <i class="bi bi-aspect-ratio"></i>
+                            <i class="bi bi-save"></i>
+                        </div>
+                        <div class="image">
+                            <!-- <img src="https://images.pexels.com/photos/167699/pexels-photo-167699.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="img-fluid" alt=""> -->
+                            <canvas id="canvasOutput" class="img-fluid"></canvas>
+                        </div>
+                        <div class="d-flex flex-column-reverse mt-5">
+                            <div class="ms-auto">
+                                <a class="btn btn-submit px-5 btn-primary">Watch How It Works </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('DOMContentLoaded', event => {
+            // Activate Bootstrap scrollspy for the sticky nav component
+            const navStick = document.body.querySelector('#navStick');
+            if (navStick) {
+                new bootstrap.ScrollSpy(document.body, {
+                    target: '#navStick',
+                    offset: 82,
+                });
+            }
+
+            // Collapse Navbar
+            // Add styling fallback for when a transparent background .navbar-marketing is scrolled
+            var navbarCollapse = function () {
+                const navbarMarketingTransparentFixed = document.body.querySelector(
+                    '.navbar-marketing.bg-transparent.fixed-top');
+                if (!navbarMarketingTransparentFixed) {
+                    return;
+                }
+                if (window.scrollY === 0) {
+                    navbarMarketingTransparentFixed.classList.remove('navbar-scrolled')
+                } else {
+                    navbarMarketingTransparentFixed.classList.add('navbar-scrolled')
+                }
+
+            };
+            // Collapse now if page is not at top
+            navbarCollapse();
+            // Collapse the navbar when page is scrolled
+            document.addEventListener('scroll', navbarCollapse);
+
+        });
+    </script>
+    <script type="text/javascript">
+        let imgElement = document.getElementById('imageSrc');
+        let inputElement = document.getElementById('fileInput');
+        let filter = document.getElementById("filter");
+        var slider = document.getElementById("myRange");
+        slider.step = 2;
+        let apply = document.getElementById("apply");
+        var output = document.getElementById("demo");
+        output.innerHTML = "" + slider.value + "x" + slider.value;
+
+        let sliderVal = Number(slider.value);
+        slider.oninput = function () {
+            output.innerHTML = "" + this.value + "x" + this.value;
+            sliderVal = Number(this.value);
+        }
+        inputElement.addEventListener('change', (e) => {
+            imgElement.src = URL.createObjectURL(e.target.files[0]);
+        }, false);
+        let dst, src, M;
+
+        let filterName = "";
+        filter.addEventListener("change", function (e) {
+            e.preventDefault()
+            src = cv.imread(imgElement);
+            dst = new cv.Mat();
+            M = cv.Mat.eye(3, 3, cv.CV_32FC1);
+            let ksize = new cv.Size(sliderVal, sliderVal);
+            if (filter.value === "Laplacian") {
+                cv.cvtColor(src, src, cv.COLOR_RGB2GRAY, 0);
+                filterName = "Laplacian";
+                cv.Laplacian(src, dst, cv.CV_8U, sliderVal);
+                console.log("Laplacian");
+            } 
+        });
+
+        apply.addEventListener('click', (e) => {
+            e.preventDefault()
+            if (filterName !== "" || filterName === null) {
+                cv.imshow('canvasOutput', dst);
+                src.delete();
+                dst.delete();
+                M.delete();
+            } else {
+                alert("Select Filter!")
+            }
+        })
+
+        function onOpenCvReady() {
+            document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+        }
+    </script>
+    <script async src="https://docs.opencv.org/4.5.2/opencv.js" onload="onOpenCvReady();" type="text/javascript">
+    </script>
+</body>
+
+</html>
