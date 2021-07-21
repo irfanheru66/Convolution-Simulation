@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import cv from "@techstark/opencv-js";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
 import arrayFlatten from '../utils/arrayFlatten';
+import { v4 as uuidV4 } from "uuid";
 
 const Reduction = () => {
     const [imageSrc, setImageSrc] = useState("")
@@ -23,8 +24,9 @@ const Reduction = () => {
             cv.blur(src, dst, ksize, new cv.Point(-1, -1), cv.BORDER_DEFAULT)
         }
         else if (filter === "Custom") {
-            let inputKernel = cv.matFromArray(3, 3, cv.CV_32FC1, arrayFlatten(kernel))
-            console.log('kernel', inputKernel)
+            console.log(kernel)
+            // console.log(arrayObjectFlatten(kernel))
+            let inputKernel = cv.matFromArray(parseInt(kernelSize), parseInt(kernelSize), cv.CV_32FC1, arrayObjectFlatten(kernel))
             let anchor = new cv.Point(-1, -1);
             cv.filter2D(src, dst, cv.CV_8U, inputKernel, anchor, 0, cv.BORDER_DEFAULT);
         }
@@ -34,29 +36,57 @@ const Reduction = () => {
         M.delete();
     }
 
-    const handleKernel = (e) => {
-        setKernelSize(e.target.value)
-        let kernel = []
-        for (let i = 0; i < e.target.value; i++) {
-            kernel.push([])
-            for (let j = 0; j < e.target.value; j++) {
-                kernel[i].push(1)
-            }
-        }
-        setKernel(kernel)
+    // let isi = [[0.0625, 0.125, 0.0625],
+    // [0.125, 0.25, 0.125],
+    // [0.0625, 0.125, 0.0625]]
+
+    const arrayObjectFlatten = (arr = []) => {
+        let num = []
+        arr.map((row, index) => {
+            row.value.map((row_2, index_2) => {
+                num.push(row_2.value)
+            })
+        })
+        return num
     }
 
-    const updateKernel = (e, index, index_2) => {
-        // use a functional state update to update from previous state
+    useEffect(() => {
+        let kernel = [];
+
+        for (let i = 0; i < kernelSize; i++) {
+            kernel.push({
+                id: uuidV4(),
+                value: []
+            });
+            for (let j = 0; j < kernelSize; j++) {
+                kernel[i].value.push({
+                    id: uuidV4(),
+                    value: 0.125
+                });
+            }
+        }
+        setKernel(kernel);
+    }, [kernelSize]);
+
+    const handleKernel = (e) => {
+        setKernelSize(e.target.value);
+    };
+
+    const updateKernel = (index, index2) => (e) => {
         setKernel((kernel) =>
-            // shallow copy outer array
             kernel.map((outerEl, i1) =>
                 i1 === index
-                    // shallow copy inner array on index match
-                    ? outerEl.map((innerEl, i2) =>
-                        // update at index match or return current
-                        i2 === index_2 ? e.target.value : innerEl
-                    )
+                    ? {
+                        ...outerEl,
+                        value: outerEl.value.map((innerEl, i2) =>
+                            i2 === index2
+                                ? {
+                                    ...innerEl,
+                                    value: e.target.value
+                                }
+                                : innerEl
+                        )
+                    }
                     : outerEl
             )
         );
@@ -111,15 +141,15 @@ const Reduction = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {filter === "Custom" &&
+                                    {/* {filter === "Custom" &&
                                         kernel.map((value, index) => {
                                             return (
-                                                <div className="row mt-3" key={`${index}_${value}`}>
+                                                <div className="row-custom mt-3" key={`${index}_${value}`}>
                                                     {
                                                         value.map((value_2, index_2) => {
                                                             return (
                                                                 <div className="input-wrap" key={`${index_2}_${value_2}`}>
-                                                                    <input type="text" id="" className="form-control" value={value_2} onChange={(e) => updateKernel(e, index, index_2)} />
+                                                                    <input type="number" pattern="[0-9]*" id="" className="form-control" value={value_2} onChange={(e) => updateKernel(e, index, index_2)} />
                                                                 </div>
                                                             )
                                                         })
@@ -127,7 +157,25 @@ const Reduction = () => {
                                                 </div>
                                             )
                                         })
-                                    }
+                                    } */}
+                                    {filter === "Custom" && kernel.map((row, index) => {
+                                        return (
+                                            <div className="row-custom mt-3" key={row.id}>
+                                                {row.value.map(({ id, value }, index_2) => {
+                                                    return (
+                                                        <span className="input-wrap" key={id}>
+                                                            <input
+                                                                type="number"
+                                                                className="form-control"
+                                                                value={value}
+                                                                onChange={updateKernel(index, index_2)}
+                                                            />
+                                                        </span>
+                                                    );
+                                                })}
+                                            </div>
+                                        );
+                                    })}
                                     <div className="d-flex flex-column-reverse mt-5">
                                         <div className="ms-auto">
                                             <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>

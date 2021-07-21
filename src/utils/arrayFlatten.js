@@ -8,4 +8,6 @@ const arrayFlatten = (array) => {
     return num;
 }
 
+
+
 export default arrayFlatten

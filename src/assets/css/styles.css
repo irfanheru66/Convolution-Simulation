@@ -308,19 +308,24 @@ select.form-control:focus {
 }
 
 .input-wrap{
-    max-width: 60px;
+    max-width: 50px;
 }
 .input-wrap input{
-    padding: .2rem .6rem;
+    padding: .2rem .2rem;
 }
 .row-custom{
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
     display: flex;
     flex-wrap: wrap;
+    margin-top: calc(var(--bs-gutter-y) * -1);
+    margin-right: calc(var(--bs-gutter-x) * -.5);
+    margin-left: calc(var(--bs-gutter-x) * -.5);
 
 }
 .row-custom > *{
     display: flex;
     flex-wrap: wrap;
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
 }

@@ -6,6 +6,7 @@ import { Button, Form, Card, Container, Col, Row, Image, Navbar } from 'react-bo
 import Home from './components/Home';
 import Reduction from './components/Reduction';
 import EdgeDetection from './components/EdgeDetection';
+import HighPass from './components/HighPass';
 
 
 function App() {
@@ -22,6 +23,9 @@ function App() {
             </Route>
             <Route exact path="/edge-detection">
               <EdgeDetection></EdgeDetection>
+            </Route>
+            <Route exact path="/high-pass">
+              <HighPass></HighPass>
             </Route>
           </Switch>
         </div>
