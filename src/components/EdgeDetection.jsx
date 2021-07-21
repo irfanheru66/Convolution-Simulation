@@ -3,6 +3,7 @@ import cv from "@techstark/opencv-js";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
 import RenderKernel from './RenderKernel';
+import arrayFlatten from '../utils/arrayFlatten';
 
 const EdgeDetection = () => {
     const [imageSrc, setImageSrc] = useState("")
@@ -30,9 +31,6 @@ const EdgeDetection = () => {
         } else if (filter === "Prewitt") {
             let X = arrayFlatten([[1, 0, -1], [1, 0, -1], [1, 0, -1]])
             let Y = arrayFlatten([[1, 1, 1], [0, 0, 0], [-1, -1, -1]])
-            kernel = {
-                X, Y
-            }
             let dstx = new cv.Mat();
             let dsty = new cv.Mat();
             let prewittX = cv.matFromArray(3, 3, cv.CV_32FC1, X);
@@ -89,16 +87,6 @@ const EdgeDetection = () => {
             ])
         } else if (e.target.value === "Scharr") {
         }
-    }
-
-    const arrayFlatten = (array) => {
-        let num = [];
-        for (let i = 0; i < array.length; i++) {
-            for (let j = 0; j < array[i].length; j++) {
-                num.push(array[i][j]);
-            }
-        }
-        return num;
     }
     return (
         <div>
