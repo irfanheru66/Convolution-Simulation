@@ -217,11 +217,17 @@ a.dropdown-item {
 
 .icon {
     color: var(--red-primary);
-    font-size: 25px;
 }
 
 .icon i {
+    font-size: 25px;
     margin: 0 3px;
+    transition: .2s ease-in-out;
+}
+
+.icon i:hover{
+    cursor: pointer;
+    font-size: 30px;
 }
 
 #status {

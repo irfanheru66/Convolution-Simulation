@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Component } from 'react'
 import cv from "@techstark/opencv-js";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
 import arrayFlatten from '../utils/arrayFlatten';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
 
 const Reduction = () => {
@@ -13,6 +14,9 @@ const Reduction = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (!imageSrc) {
+            return;
+        }
         let src = cv.imread('imageSrc');
         let dst = new cv.Mat();
         let M = cv.Mat.eye(3, 3, cv.CV_32FC1);
@@ -95,8 +99,9 @@ const Reduction = () => {
     return (
         <div>
             <NavigationBar></NavigationBar>
-            <div className="container-fluid mt-5">
-                <div className="row">
+            <div className="container-fluid mt-3">
+                <h1 className="text-center fw-bold">Reduction/Smoothing</h1>
+                <div className="row mt-1">
                     <div className="col-lg-4">
                         <div className="card">
                             <div className="card-header">
@@ -106,14 +111,26 @@ const Reduction = () => {
                                 <form action="">
                                     <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
                                 </form>
-                                <div className="icon">
-                                    <i className="bi bi-zoom-in"></i>
-                                    <i className="bi bi-zoom-out"></i>
-                                    <i className="bi bi-aspect-ratio"></i>
-                                </div>
-                                <div className="image">
-                                    <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
-                                </div>
+
+                                <TransformWrapper
+                                    initialScale={1}
+                                >
+                                    {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                        <React.Fragment>
+                                            <div className="icon">
+                                                <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                            </div>
+                                            <TransformComponent>
+                                                <div className="image">
+                                                    <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
+                                                </div>
+                                            </TransformComponent>
+                                        </React.Fragment>
+                                    )}
+                                </TransformWrapper>
+
                             </div>
                         </div>
                     </div>
@@ -191,19 +208,29 @@ const Reduction = () => {
                                 Output Image
                             </div>
                             <div className="card-body">
-                                <div className="icon">
-                                    <i className="bi bi-zoom-in"></i>
-                                    <i className="bi bi-zoom-out"></i>
-                                    <i className="bi bi-aspect-ratio"></i>
-                                    <i className="bi bi-save"></i>
-                                </div>
-                                <canvas id="canvasOutput" className="img-fluid image"></canvas>
+                                <TransformWrapper
+                                    initialScale={1}
+                                >
+                                    {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                        <React.Fragment>
+                                            <div className="icon">
+                                                <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                            </div>
+                                            <TransformComponent>
+                                                <canvas id="canvasOutput" className="img-fluid image"></canvas>
+                                            </TransformComponent>
+                                        </React.Fragment>
+                                    )}
+                                </TransformWrapper>
                                 <div className="d-flex flex-column-reverse mt-5">
                                     <div className="ms-auto">
                                         <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
