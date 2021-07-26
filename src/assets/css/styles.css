@@ -215,17 +215,14 @@ a.dropdown-item {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
-.icon {
+.icon i, .icon a {
     color: var(--red-primary);
-}
-
-.icon i {
     font-size: 25px;
     margin: 0 3px;
     transition: .2s ease-in-out;
 }
 
-.icon i:hover{
+.icon i:hover, .icon a:hover{
     cursor: pointer;
     font-size: 30px;
 }

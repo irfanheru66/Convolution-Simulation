@@ -7,7 +7,7 @@ import RenderKernel from './RenderKernel';
 import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
 import { downloadImageOutput } from '../utils/downloadImage'
 
-const EdgeDetection = () => {
+const OtherEffect = () => {
     const [imageSrc, setImageSrc] = useState("")
     const [kernel, setKernel] = useState([])
     const [filter, setFilter] = useState("")
@@ -75,18 +75,6 @@ const EdgeDetection = () => {
             setKernel([
                 { X }, { Y }
             ])
-        } else if (e.target.value === "Sobel") {
-            let X = [[-1, 0, 1], [-2, 0, -2], [-1, 0, 1]]
-            let Y = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]]
-            setKernel([
-                { X }, { Y }
-            ])
-        } else if (e.target.value === "Prewitt") {
-            let X = [[1, 0, -1], [1, 0, -1], [1, 0, -1]]
-            let Y = [[1, 1, 1], [0, 0, 0], [-1, -1, -1]]
-            setKernel([
-                { X }, { Y }
-            ])
         } else if (e.target.value === "Laplacian") {
             let X = [[0, -1, 0], [-1, 4, -1], [0, -1, 0]]
             setKernel([
@@ -141,34 +129,11 @@ const EdgeDetection = () => {
                                 <form onSubmit={handleSubmit}>
                                     <select name="noise" id="filter" className="form-control" onChange={(e) => handleSelectFilter(e)} required>
                                         <option value="">-Select Filter-</option>
-                                        <option value="Canny">Canny Edge Detection</option>
-                                        <option value="Sobel">Sobel Edge Detection</option>
-                                        <option value="Prewitt">Prewitt Edge Detection</option>
-                                        <option value="Scharr">Scharr Edge Detection</option>
-                                        <option value="Laplacian">Laplacian Filter</option>
+                                        <option value="Canny">Emboss Effect</option>
+                                        <option value="Sobel">Sephia Effect</option>
                                     </select>
                                     <div className="row mt-2">
                                         <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
-                                        {/* <div className="col-lg-6">
-                                            <div className="row">
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> */}
-                                        {/* <div className="col-lg-6"></div> */}
                                     </div>
                                     <div className="d-flex flex-column-reverse mt-5">
                                         <div className="ms-auto">
@@ -216,4 +181,4 @@ const EdgeDetection = () => {
     )
 }
 
-export default EdgeDetection
+export default OtherEffect

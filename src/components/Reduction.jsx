@@ -1,22 +1,26 @@
-import React, { useState, useEffect, Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import cv from "@techstark/opencv-js";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
-import arrayFlatten from '../utils/arrayFlatten';
+import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
+import { downloadImageOutput } from '../utils/downloadImage'
 
 const Reduction = () => {
     const [imageSrc, setImageSrc] = useState("")
     const [kernelSize, setKernelSize] = useState(3)
+    const [errorMessage, setErrorMessage] = useState('');
     const [kernel, setKernel] = useState([])
     const [filter, setFilter] = useState("")
+    const canvasRef = useRef()
+    const downloadButtonRef = useRef()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (!imageSrc) {
-            return;
-        }
+        // if (!imageSrc) {
+        //     return;
+        // }
         let src = cv.imread('imageSrc');
         let dst = new cv.Mat();
         let M = cv.Mat.eye(3, 3, cv.CV_32FC1);
@@ -27,12 +31,39 @@ const Reduction = () => {
         } else if (filter === "Mean") {
             cv.blur(src, dst, ksize, new cv.Point(-1, -1), cv.BORDER_DEFAULT)
         }
+        else if (filter === "Motion") {
+            // let arrayKernel = [
+            //     1, 0, 0, 0, 0, 0, 0, 0, 0,
+            //     0, 1, 0, 0, 0, 0, 0, 0, 0,
+            //     0, 0, 1, 0, 0, 0, 0, 0, 0,
+            //     0, 0, 0, 1, 0, 0, 0, 0, 0,
+            //     0, 0, 0, 0, 1, 0, 0, 0, 0,
+            //     0, 0, 0, 0, 0, 1, 0, 0, 0,
+            //     0, 0, 0, 0, 0, 0, 1, 0, 0,
+            //     0, 0, 0, 0, 0, 0, 0, 1, 0,
+            //     0, 0, 0, 0, 0, 0, 0, 0, 1,
+            // ]
+
+            // let anchor = new cv.Point(-1, -1);
+            // let inputKernel = cv.matFromArray(9, 9, cv.CV_32FC2, arrayKernel)
+            // cv.filter2D(src, dst, cv.CV_8U, inputKernel, anchor, 0, cv.BORDER_DEFAULT)
+        }
         else if (filter === "Custom") {
-            console.log(kernel)
             // console.log(arrayObjectFlatten(kernel))
-            let inputKernel = cv.matFromArray(parseInt(kernelSize), parseInt(kernelSize), cv.CV_32FC1, arrayObjectFlatten(kernel))
+            let arrayKernel = arrayObjectFlatten(kernel)
+            let sumKernel = arrayKernel.reduce(function (total, value) {
+                return parseFloat(total) + parseFloat(value);
+            }, 0);
+            console.log(sumKernel)
+            if (parseFloat(sumKernel) > 1) {
+                setErrorMessage("Maximum number of kernel coefficients 1")
+            } else if (parseFloat(sumKernel) <= 1) {
+                setErrorMessage("")
+            }
+            let inputKernel = cv.matFromArray(parseInt(kernelSize), parseInt(kernelSize), cv.CV_32FC1, arrayKernel)
             let anchor = new cv.Point(-1, -1);
             cv.filter2D(src, dst, cv.CV_8U, inputKernel, anchor, 0, cv.BORDER_DEFAULT);
+
         }
         cv.imshow('canvasOutput', dst);
         src.delete();
@@ -43,16 +74,6 @@ const Reduction = () => {
     // let isi = [[0.0625, 0.125, 0.0625],
     // [0.125, 0.25, 0.125],
     // [0.0625, 0.125, 0.0625]]
-
-    const arrayObjectFlatten = (arr = []) => {
-        let num = []
-        arr.map((row, index) => {
-            row.value.map((row_2, index_2) => {
-                num.push(row_2.value)
-            })
-        })
-        return num
-    }
 
     useEffect(() => {
         let kernel = [];
@@ -65,7 +86,7 @@ const Reduction = () => {
             for (let j = 0; j < kernelSize; j++) {
                 kernel[i].value.push({
                     id: uuidV4(),
-                    value: 0.125
+                    value: 0.111
                 });
             }
         }
@@ -145,6 +166,7 @@ const Reduction = () => {
                                         <option value="">-Select Filter-</option>
                                         <option value="Gaussian">Gaussian Filter</option>
                                         <option value="Mean">Mean Filter</option>
+                                        <option value="Motion">Motion Blur Filter</option>
                                         <option value="Custom">Custom Filter</option>
                                     </select>
                                     <div className="form-group">
@@ -193,6 +215,9 @@ const Reduction = () => {
                                             </div>
                                         );
                                     })}
+                                    {errorMessage && (
+                                        <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
+                                    )}
                                     <div className="d-flex flex-column-reverse mt-5">
                                         <div className="ms-auto">
                                             <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
@@ -217,9 +242,10 @@ const Reduction = () => {
                                                 <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
                                                 <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
                                                 <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
                                             </div>
                                             <TransformComponent>
-                                                <canvas id="canvasOutput" className="img-fluid image"></canvas>
+                                                <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
                                             </TransformComponent>
                                         </React.Fragment>
                                     )}

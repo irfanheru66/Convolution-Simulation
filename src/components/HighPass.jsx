@@ -1,8 +1,9 @@
-import React, { useState, useEffect, Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import cv from "@techstark/opencv-js";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
-import arrayFlatten from '../utils/arrayFlatten';
+import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
+import { downloadImageOutput } from '../utils/downloadImage'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
 
@@ -12,12 +13,14 @@ const HighPass = () => {
     const [kernelSize, setKernelSize] = useState(3)
     const [kernel, setKernel] = useState([])
     const [filter, setFilter] = useState("")
+    const canvasRef = useRef()
+    const downloadButtonRef = useRef()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (!imageSrc) {
-            return;
-        }
+        // if (!imageSrc) {
+        //     return;
+        // }
         let src = cv.imread('imageSrc');
         let dst = new cv.Mat();
         let gray = new cv.Mat();
@@ -33,7 +36,6 @@ const HighPass = () => {
             let sumKernel = arrayKernel.reduce(function (total, value) {
                 return parseInt(total) + parseInt(value);
             }, 0);
-            console.log(sumKernel)
             if (parseInt(sumKernel) != 0 && parseInt(sumKernel) != 1) {
                 setErrorMessage("Sum of kernel must be 0 or 1!")
             } else {
@@ -54,16 +56,6 @@ const HighPass = () => {
     // let isi = [[0.0625, 0.125, 0.0625],
     // [0.125, 0.25, 0.125],
     // [0.0625, 0.125, 0.0625]]
-
-    const arrayObjectFlatten = (arr = []) => {
-        let num = []
-        arr.map((row, index) => {
-            row.value.map((row_2, index_2) => {
-                num.push(row_2.value)
-            })
-        })
-        return num
-    }
 
     useEffect(() => {
         let kernel = [];
@@ -211,9 +203,10 @@ const HighPass = () => {
                                                 <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
                                                 <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
                                                 <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
                                             </div>
                                             <TransformComponent>
-                                                <canvas id="canvasOutput" className="img-fluid image"></canvas>
+                                                <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
                                             </TransformComponent>
                                         </React.Fragment>
                                     )}
@@ -228,7 +221,7 @@ const HighPass = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
