@@ -18,9 +18,6 @@ const Reduction = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        // if (!imageSrc) {
-        //     return;
-        // }
         let src = cv.imread('imageSrc');
         let dst = new cv.Mat();
         let M = cv.Mat.eye(3, 3, cv.CV_32FC1);
@@ -125,64 +122,98 @@ const Reduction = () => {
             <div className="container-fluid mt-3">
                 <h1 className="text-center fw-bold">Reduction/Smoothing</h1>
                 <div className="row mt-1">
-                    <div className="col-lg-4">
-                        <div className="card">
-                            <div className="card-header">
-                                Input Image
-                            </div>
-                            <div className="card-body">
-                                <form action="">
-                                    <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
-                                </form>
+                    <div className="col-lg-8">
+                        <div className="row">
+                            <div className="col-lg-12 mb-3">
+                                <div className="card">
+                                    <div className="card-header">
+                                        Input Image
+                                    </div>
+                                    <div className="card-body">
+                                        <form action="">
+                                            <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
+                                        </form>
 
-                                <TransformWrapper
-                                    initialScale={1}
-                                >
-                                    {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                                        <React.Fragment>
-                                            <div className="icon">
-                                                <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
-                                                <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
-                                                <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
-                                            </div>
-                                            <TransformComponent>
-                                                <div className="image">
-                                                    <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
-                                                </div>
-                                            </TransformComponent>
-                                        </React.Fragment>
-                                    )}
-                                </TransformWrapper>
+                                        <TransformWrapper
+                                            initialScale={1}
+                                        >
+                                            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                                <React.Fragment>
+                                                    <div className="icon">
+                                                        <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                        <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                        <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                    </div>
+                                                    <TransformComponent>
+                                                        <div className="image">
+                                                            <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
+                                                        </div>
+                                                    </TransformComponent>
+                                                </React.Fragment>
+                                            )}
+                                        </TransformWrapper>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="col-lg-12 mb-3">
+                                <div className="card">
+                                    <div className="card-header">
+                                        Output Image
+                                    </div>
+                                    <div className="card-body">
+                                        <TransformWrapper
+                                            initialScale={1}
+                                        >
+                                            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                                <React.Fragment>
+                                                    <div className="icon">
+                                                        <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                        <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                        <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                        <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
+                                                    </div>
+                                                    <TransformComponent>
+                                                        <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
+                                                    </TransformComponent>
+                                                </React.Fragment>
+                                            )}
+                                        </TransformWrapper>
+                                    </div>
+
+                                </div>
 
                             </div>
                         </div>
                     </div>
                     <div className="col-lg-4">
-                        <div className="card">
-                            <div className="card-header">
-                                Process
-                            </div>
-                            <div className="card-body">
-                                <form onSubmit={handleSubmit}>
-                                    <select name="noise" id="filter" className="form-control" onChange={(e) => setFilter(e.target.value)} required>
-                                        <option value="">-Select Filter-</option>
-                                        <option value="Gaussian">Gaussian Filter</option>
-                                        <option value="Mean">Mean Filter</option>
-                                        <option value="Motion">Motion Blur Filter</option>
-                                        <option value="Custom">Custom Filter</option>
-                                    </select>
-                                    <div className="form-group">
-                                        <label for="">Kernel Size</label>
-                                        <div className="d-flex">
-                                            <div className="kernel">
-                                                <span id="demo">{`${kernelSize}x${kernelSize}`}</span>
-                                            </div>
-                                            <div className="w-100 ps-2 mt-2">
-                                                <input type="range" step="2" name="range" min="3" max="7" value={kernelSize} className="slider" onChange={(e) => handleKernel(e)} />
+                        <div className="">
+                            <div className="card">
+                                <div className="card-header">
+                                    Process
+                                </div>
+                                <div className="card-body">
+                                    <form onSubmit={handleSubmit}>
+                                        <select name="noise" id="filter" className="form-control" onChange={(e) => setFilter(e.target.value)} required>
+                                            <option value="">-Select Filter-</option>
+                                            <option value="Gaussian">Gaussian Filter</option>
+                                            <option value="Mean">Mean Filter</option>
+                                            <option value="Motion">Motion Blur Filter</option>
+                                            <option value="Custom">Custom Filter</option>
+                                        </select>
+                                        <div className="form-group">
+                                            <label for="">Kernel Size</label>
+                                            <div className="d-flex">
+                                                <div className="kernel">
+                                                    <span id="demo">{`${kernelSize}x${kernelSize}`}</span>
+                                                </div>
+                                                <div className="w-100 ps-2 mt-2">
+                                                    <input type="range" step="2" name="range" min="3" max="7" value={kernelSize} className="slider" onChange={(e) => handleKernel(e)} />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {/* {filter === "Custom" &&
+                                        {/* {filter === "Custom" &&
                                         kernel.map((value, index) => {
                                             return (
                                                 <div className="row-custom mt-3" key={`${index}_${value}`}>
@@ -199,63 +230,32 @@ const Reduction = () => {
                                             )
                                         })
                                     } */}
-                                    {filter === "Custom" && kernel.map((row, index) => {
-                                        return (
-                                            <div className="row-custom mt-3" key={row.id}>
-                                                {row.value.map(({ id, value }, index_2) => {
-                                                    return (
-                                                        <span className="input-wrap" key={id}>
-                                                            <input
-                                                                type="number"
-                                                                className="form-control"
-                                                                value={value}
-                                                                onChange={updateKernel(index, index_2)}
-                                                            />
-                                                        </span>
-                                                    );
-                                                })}
-                                            </div>
-                                        );
-                                    })}
-                                    {errorMessage && (
-                                        <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
-                                    )}
-                                    <div className="d-flex flex-column-reverse mt-5">
-                                        <div className="ms-auto">
+                                        {filter === "Custom" && kernel.map((row, index) => {
+                                            return (
+                                                <div className="row-custom mt-3" key={row.id}>
+                                                    {row.value.map(({ id, value }, index_2) => {
+                                                        return (
+                                                            <span className="input-wrap" key={id}>
+                                                                <input
+                                                                    type="number"
+                                                                    className="form-control"
+                                                                    value={value}
+                                                                    onChange={updateKernel(index, index_2)}
+                                                                />
+                                                            </span>
+                                                        );
+                                                    })}
+                                                </div>
+                                            );
+                                        })}
+                                        {errorMessage && (
+                                            <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
+                                        )}
+                                        <div className="d-flex justify-content-between mt-5">
+                                            <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
                                             <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4">
-                        <div className="card">
-                            <div className="card-header">
-                                Output Image
-                            </div>
-                            <div className="card-body">
-                                <TransformWrapper
-                                    initialScale={1}
-                                >
-                                    {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                                        <React.Fragment>
-                                            <div className="icon">
-                                                <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
-                                                <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
-                                                <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
-                                                <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
-                                            </div>
-                                            <TransformComponent>
-                                                <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
-                                            </TransformComponent>
-                                        </React.Fragment>
-                                    )}
-                                </TransformWrapper>
-                                <div className="d-flex flex-column-reverse mt-5">
-                                    <div className="ms-auto">
-                                        <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
 

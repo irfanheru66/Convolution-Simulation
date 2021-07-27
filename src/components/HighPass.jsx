@@ -105,34 +105,66 @@ const HighPass = () => {
             <div className="container-fluid mt-3">
                 <h1 className="text-center fw-bold">High Pass Filter</h1>
                 <div className="row mt-1">
-                    <div className="col-lg-4">
-                        <div className="card">
-                            <div className="card-header">
-                                Input Image
+                    <div className="col-lg-8">
+                        <div className="row">
+                            <div className="col-lg-12 mb-3">
+                                <div className="card">
+                                    <div className="card-header">
+                                        Input Image
+                                    </div>
+                                    <div className="card-body">
+                                        <form action="">
+                                            <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
+                                        </form>
+                                        <TransformWrapper
+                                            initialScale={1}
+                                        >
+                                            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                                <React.Fragment>
+                                                    <div className="icon">
+                                                        <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                        <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                        <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                    </div>
+                                                    <TransformComponent>
+                                                        <div className="image">
+                                                            <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
+                                                        </div>
+                                                    </TransformComponent>
+                                                </React.Fragment>
+                                            )}
+                                        </TransformWrapper>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="card-body">
-                                <form action="">
-                                    <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
-                                </form>
-                                <TransformWrapper
-                                    initialScale={1}
-                                >
-                                    {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                                        <React.Fragment>
-                                            <div className="icon">
-                                                <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
-                                                <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
-                                                <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
-                                            </div>
-                                            <TransformComponent>
-                                                <div className="image">
-                                                    <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
-                                                </div>
-                                            </TransformComponent>
-                                        </React.Fragment>
-                                    )}
-                                </TransformWrapper>
+                            <div className="col-lg-12 mb-3">
+                                <div className="card">
+                                    <div className="card-header">
+                                        Output Image
+                                    </div>
+                                    <div className="card-body">
+                                        <TransformWrapper
+                                            initialScale={1}
+                                        >
+                                            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                                <React.Fragment>
+                                                    <div className="icon">
+                                                        <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                        <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                        <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                        <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
+                                                    </div>
+                                                    <TransformComponent>
+                                                        <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
+                                                    </TransformComponent>
+                                                </React.Fragment>
+                                            )}
+                                        </TransformWrapper>
+                                    </div>
+                                </div>
                             </div>
+
+
                         </div>
                     </div>
                     <div className="col-lg-4">
@@ -179,46 +211,15 @@ const HighPass = () => {
                                     {errorMessage && (
                                         <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
                                     )}
-                                    <div className="d-flex flex-column-reverse mt-5">
-                                        <div className="ms-auto">
-                                            <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
-                                        </div>
+                                    <div className="d-flex justify-content-between mt-5">
+                                        <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
+                                        <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-4">
-                        <div className="card">
-                            <div className="card-header">
-                                Output Image
-                            </div>
-                            <div className="card-body">
-                                <TransformWrapper
-                                    initialScale={1}
-                                >
-                                    {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                                        <React.Fragment>
-                                            <div className="icon">
-                                                <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
-                                                <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
-                                                <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
-                                                <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
-                                            </div>
-                                            <TransformComponent>
-                                                <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
-                                            </TransformComponent>
-                                        </React.Fragment>
-                                    )}
-                                </TransformWrapper>
-                                <div className="d-flex flex-column-reverse mt-5">
-                                    <div className="ms-auto">
-                                        <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div >

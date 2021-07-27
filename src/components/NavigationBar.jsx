@@ -35,6 +35,7 @@ const NavigationBar = () => {
                                         <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/high-pass">High-Pass
                                             Filter</Link>
                                         <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/edge-detection">Edge Detection</Link>
+                                        <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/others">Others</Link>
                                     </div>
                                 </div>
                             </div>

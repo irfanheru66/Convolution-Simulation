@@ -1,12 +1,11 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
-import { Button, Form, Card, Container, Col, Row, Image, Navbar } from 'react-bootstrap';
 import Home from './components/Home';
 import Reduction from './components/Reduction';
 import EdgeDetection from './components/EdgeDetection';
 import HighPass from './components/HighPass';
+import OtherEffect from './components/OtherEffect';
 
 
 function App() {
@@ -26,6 +25,9 @@ function App() {
             </Route>
             <Route exact path="/high-pass">
               <HighPass></HighPass>
+            </Route>
+            <Route exact path="/others">
+              <OtherEffect></OtherEffect>
             </Route>
           </Switch>
         </div>
