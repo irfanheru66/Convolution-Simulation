@@ -32,21 +32,23 @@ const Reduction = () => {
             cv.blur(src, dst, ksize, new cv.Point(-1, -1), cv.BORDER_DEFAULT)
         }
         else if (filter === "Motion") {
-            // let arrayKernel = [
-            //     1, 0, 0, 0, 0, 0, 0, 0, 0,
-            //     0, 1, 0, 0, 0, 0, 0, 0, 0,
-            //     0, 0, 1, 0, 0, 0, 0, 0, 0,
-            //     0, 0, 0, 1, 0, 0, 0, 0, 0,
-            //     0, 0, 0, 0, 1, 0, 0, 0, 0,
-            //     0, 0, 0, 0, 0, 1, 0, 0, 0,
-            //     0, 0, 0, 0, 0, 0, 1, 0, 0,
-            //     0, 0, 0, 0, 0, 0, 0, 1, 0,
-            //     0, 0, 0, 0, 0, 0, 0, 0, 1,
-            // ]
+            let arrayKernel = [
+                1, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 1, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 1, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 1, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 1, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 1,
+            ]
 
-            // let anchor = new cv.Point(-1, -1);
-            // let inputKernel = cv.matFromArray(9, 9, cv.CV_32FC2, arrayKernel)
-            // cv.filter2D(src, dst, cv.CV_8U, inputKernel, anchor, 0, cv.BORDER_DEFAULT)
+            let gray = new cv.Mat()
+            cv.cvtColor(src, gray, cv.COLOR_RGB2GRAY, 0);
+            let anchor = new cv.Point(-1, -1);
+            let inputKernel = cv.matFromArray(9, 9, cv.CV_32FC1, arrayKernel)
+            cv.filter2D(gray, dst, -1, inputKernel);
         }
         else if (filter === "Custom") {
             // console.log(arrayObjectFlatten(kernel))
