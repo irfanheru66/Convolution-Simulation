@@ -23,17 +23,15 @@ const NavigationBar = () => {
                         <li className="nav-item dropdown dropdown-xl no-caret">
                             <a className="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Features
+                                Filters
                                 <i className="fas fa-chevron-right dropdown-arrow"></i>
                             </a>
                             <div className="dropdown-menu dropdown-menu-end animated--fade-in-up"
                                 aria-labelledby="navbarDropdownDemos">
                                 <div className="row g-0">
-                                    <div className="col-lg-12 ps-5 pe-5 pt-3 pb-3">
-                                        <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/noise-reduction">Noise
-                                            Reduction</Link>
-                                        <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/high-pass">High-Pass
-                                            Filter</Link>
+                                    <div className="col-lg-12 p-3">
+                                        <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/noise-reduction">Noise Reduction</Link>
+                                        <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/sharpening">Sharpening</Link>
                                         <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/edge-detection">Edge Detection</Link>
                                         <Link className="dropdown-item" style={{ fontSize: 25 + 'px' }} to="/others">Others</Link>
                                     </div>

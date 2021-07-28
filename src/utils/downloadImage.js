@@ -4,8 +4,8 @@ const dataUriToBlob = (dataUri) => {
     return new Blob([u8], { type: 'image/png' });
 }
 
-export const downloadImageOutput = (canvasRef, downloadButtonRef) => {
-    const data = canvasRef.current.toDataURL()
+export const downloadImageOutput = (outputImageRef, downloadButtonRef) => {
+    const data = outputImageRef.current.toDataURL()
     const url = URL.createObjectURL(dataUriToBlob(data));
     downloadButtonRef.current.href = url
 }

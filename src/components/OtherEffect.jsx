@@ -8,6 +8,8 @@ import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
 import { downloadImageOutput } from '../utils/downloadImage'
 
 const OtherEffect = () => {
+    const primaryColor = "#fdaa56";
+    const accentColor = "#ef5241";
     const [imageSrc, setImageSrc] = useState("")
     const [kernel, setKernel] = useState([])
     const [filter, setFilter] = useState("")
@@ -70,9 +72,9 @@ const OtherEffect = () => {
         <div>
             <NavigationBar></NavigationBar>
             <div className="container-fluid mt-3">
-                <h1 className="text-center fw-bold">Other Effect</h1>
+                <h1 className="text-center fw-bold" style={{ color: primaryColor }}>Other Effects</h1>
                 <div className="row mt-1">
-                    <div className="col-lg-8">
+                    <div className="col-lg-8 order-lg-1 order-md-2">
                         <div className="row">
                             <div className="col-lg-12 mb-3">
                                 <div className="card">
@@ -135,7 +137,7 @@ const OtherEffect = () => {
                         </div>
                     </div>
 
-                    <div className="col-lg-4">
+                    <div className="col-lg-4 order-lg-2 order-md-1 mb-3">
                         <div className="card">
                             <div className="card-header">
                                 Process

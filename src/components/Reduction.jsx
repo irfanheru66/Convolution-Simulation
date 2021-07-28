@@ -1,20 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react'
 import cv from "@techstark/opencv-js";
-import NavigationBar from './NavigationBar'
-import '../assets/css/styles.css';
-import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
+import Tour from "reactour";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
+import NavigationBar from './NavigationBar'
+import '../assets/css/styles.css';
+import { arrayObjectFlatten } from '../utils/arrayFlat';
 import { downloadImageOutput } from '../utils/downloadImage'
 
+const steps = [
+    {
+        selector: '.first-step',
+        content: 'This section shows the filter type or name.',
+    },
+    {
+        selector: '.second-step',
+        content: 'Select an image from the computer.',
+    },
+    {
+        selector: '.third-step',
+        content: 'This section contains features to zoom in, zoom out, and scale using the mouse or touchpad.',
+    },
+    {
+        selector: '.fourth-step',
+        content: 'Next, select the type of kernel or filter to use.',
+    },
+    {
+        selector: '.fifth-step',
+        content: 'Kernel size can be changed according to available options.',
+    },
+    {
+        selector: '.sixth-step',
+        content: 'Click apply and the image results will appear.',
+    },
+    {
+        selector: '.seventh-step',
+        content: 'This section is for displaying the result image',
+    },
+];
+
 const Reduction = () => {
+    const primaryColor = "#fdaa56";
+    const accentColor = "#ef5241";
     const [imageSrc, setImageSrc] = useState("")
     const [kernelSize, setKernelSize] = useState(3)
     const [errorMessage, setErrorMessage] = useState('');
     const [kernel, setKernel] = useState([])
+    const [kernelRender, setKernelRender] = useState([])
+    const [kernelCustom, setKernelCustom] = useState([])
     const [filter, setFilter] = useState("")
+    const [direction, setDirection] = useState(null)
     const canvasRef = useRef()
     const downloadButtonRef = useRef()
+    const [isTourOpen, setIsTourOpen] = useState(false);
+
+    const disableBody = target => disableBodyScroll(target);
+    const enableBody = target => enableBodyScroll(target);
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -29,27 +71,15 @@ const Reduction = () => {
             cv.blur(src, dst, ksize, new cv.Point(-1, -1), cv.BORDER_DEFAULT)
         }
         else if (filter === "Motion") {
-            let arrayKernel = [
-                1, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 1, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 1, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 1, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 1, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 1, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 1, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 1, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 1,
-            ]
-
+            let arrayKernel = kernel.flat()
             let gray = new cv.Mat()
             cv.cvtColor(src, gray, cv.COLOR_RGB2GRAY, 0);
-            let anchor = new cv.Point(-1, -1);
             let inputKernel = cv.matFromArray(9, 9, cv.CV_32FC1, arrayKernel)
             cv.filter2D(gray, dst, -1, inputKernel);
         }
         else if (filter === "Custom") {
             // console.log(arrayObjectFlatten(kernel))
-            let arrayKernel = arrayObjectFlatten(kernel)
+            let arrayKernel = arrayObjectFlatten(kernelCustom)
             let sumKernel = arrayKernel.reduce(function (total, value) {
                 return parseFloat(total) + parseFloat(value);
             }, 0);
@@ -70,9 +100,49 @@ const Reduction = () => {
         M.delete();
     }
 
-    // let isi = [[0.0625, 0.125, 0.0625],
-    // [0.125, 0.25, 0.125],
-    // [0.0625, 0.125, 0.0625]]
+    const handleDirection = (e) => {
+        setDirection(e.target.value)
+        if (e.target.value === "Diagonal") {
+            setKernel([
+                [0.1, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0.1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0.1, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0.1, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0.1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0.1, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0.1, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0.1],
+            ])
+        } else if (e.target.value === "Horizontal") {
+            setKernel([
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ])
+        } else if (e.target.value === "Vertical") {
+            setKernel([
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0.1, 0, 0, 0, 0],
+            ])
+        }
+        setKernelRender([
+            { X: kernel }
+        ])
+    }
 
     useEffect(() => {
         let kernel = [];
@@ -89,7 +159,7 @@ const Reduction = () => {
                 });
             }
         }
-        setKernel(kernel);
+        setKernelCustom(kernel);
     }, [kernelSize]);
 
     const handleKernel = (e) => {
@@ -97,7 +167,7 @@ const Reduction = () => {
     };
 
     const updateKernel = (index, index2) => (e) => {
-        setKernel((kernel) =>
+        setKernelCustom((kernel) =>
             kernel.map((outerEl, i1) =>
                 i1 === index
                     ? {
@@ -120,9 +190,9 @@ const Reduction = () => {
         <div>
             <NavigationBar></NavigationBar>
             <div className="container-fluid mt-3">
-                <h1 className="text-center fw-bold">Reduction/Smoothing</h1>
+                <h1 className="text-center fw-bold first-step" style={{ color: primaryColor }}>Reduction/Smoothing</h1>
                 <div className="row mt-1">
-                    <div className="col-lg-8">
+                    <div className="col-lg-8 order-lg-1 order-md-2">
                         <div className="row">
                             <div className="col-lg-12 mb-3">
                                 <div className="card">
@@ -131,7 +201,8 @@ const Reduction = () => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
+                                            <input type="file" id="fileInput" name="file" className="second-step custom-file-input" onChange={(e) =>
+                                                setImageSrc(URL.createObjectURL(e.target.files[0]))} />
                                         </form>
 
                                         <TransformWrapper
@@ -139,7 +210,7 @@ const Reduction = () => {
                                         >
                                             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                                                 <React.Fragment>
-                                                    <div className="icon">
+                                                    <div className="icon third-step">
                                                         <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
                                                         <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
                                                         <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
@@ -158,7 +229,7 @@ const Reduction = () => {
 
                             </div>
                             <div className="col-lg-12 mb-3">
-                                <div className="card">
+                                <div className="card seventh-step">
                                     <div className="card-header">
                                         Output Image
                                     </div>
@@ -187,7 +258,7 @@ const Reduction = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-4">
+                    <div className="col-lg-4 order-lg-2 order-md-1">
                         <div className="">
                             <div className="card">
                                 <div className="card-header">
@@ -195,7 +266,10 @@ const Reduction = () => {
                                 </div>
                                 <div className="card-body">
                                     <form onSubmit={handleSubmit}>
-                                        <select name="noise" id="filter" className="form-control" onChange={(e) => setFilter(e.target.value)} required>
+                                        <select name="noise" id="filter" className="form-control fourth-step" onChange={(e) => {
+                                            setDirection(null)
+                                            setFilter(e.target.value)
+                                        }} required>
                                             <option value="">-Select Filter-</option>
                                             <option value="Gaussian">Gaussian Filter</option>
                                             <option value="Mean">Mean Filter</option>
@@ -203,34 +277,26 @@ const Reduction = () => {
                                             <option value="Custom">Custom Filter</option>
                                         </select>
                                         <div className="form-group">
-                                            <label for="">Kernel Size</label>
-                                            <div className="d-flex">
-                                                <div className="kernel">
+                                            <label for="">{filter !== "Motion" ? `Kernel Size` : `Direction`}</label>
+                                            <div className="d-flex fifth-step">
+                                                {filter !== "Motion" && <div className="kernel">
                                                     <span id="demo">{`${kernelSize}x${kernelSize}`}</span>
-                                                </div>
+                                                </div>}
                                                 <div className="w-100 ps-2 mt-2">
-                                                    <input type="range" step="2" name="range" min="3" max="7" value={kernelSize} className="slider" onChange={(e) => handleKernel(e)} />
+                                                    {filter !== "Motion" ? <input type="range" step="2" name="range" min="3" max="7" value={kernelSize} className="slider " onChange={(e) => handleKernel(e)} /> :
+                                                        <select name="type" id="direction" className="form-control" onChange={(e) => {
+                                                            handleDirection(e)
+                                                        }} required>
+                                                            <option value="">-Select Direction-</option>
+                                                            <option value="Vertical">Vertical</option>
+                                                            <option value="Horizontal">Horizontal</option>
+                                                            <option value="Diagonal">Diagonal</option>
+                                                        </select>}
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* {filter === "Custom" &&
-                                        kernel.map((value, index) => {
-                                            return (
-                                                <div className="row-custom mt-3" key={`${index}_${value}`}>
-                                                    {
-                                                        value.map((value_2, index_2) => {
-                                                            return (
-                                                                <div className="input-wrap" key={`${index_2}_${value_2}`}>
-                                                                    <input type="number" pattern="[0-9]*" id="" className="form-control" value={value_2} onChange={(e) => updateKernel(e, index, index_2)} />
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                            )
-                                        })
-                                    } */}
-                                        {filter === "Custom" && kernel.map((row, index) => {
+
+                                        {filter === "Custom" && kernelCustom.map((row, index) => {
                                             return (
                                                 <div className="row-custom mt-3" key={row.id}>
                                                     {row.value.map(({ id, value }, index_2) => {
@@ -248,21 +314,59 @@ const Reduction = () => {
                                                 </div>
                                             );
                                         })}
+
+                                        {direction !== null &&
+                                            <div className="col-lg-12">
+                                                <div className="row">
+                                                    <p className="kernel-text">{`Kernel`}</p>
+                                                    {kernel.map((value, index) => {
+                                                        return (
+                                                            <div className="d-flex mb-1">
+                                                                {
+                                                                    value.map((value_2, index_2) => {
+                                                                        return (
+                                                                            <div className="bg-white mx-1 d-table" style={{ minWidth: '32px' }}>
+                                                                                <p className="text-center fw-bold d-table-cell align-middle">
+                                                                                    {value_2}
+                                                                                </p>
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+                                        }
+
                                         {errorMessage && (
                                             <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
                                         )}
-                                        <div className="d-flex justify-content-between mt-5">
-                                            <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
+                                        <div className="d-flex justify-content-between mt-5 sixth-step">
+                                            <a className="btn btn-submit btn-primary">Watch How It Works </a>
                                             <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-
+                            <div className="d-flex justify-content-center my-3">
+                                <button className="btn fw-500 btn-lg btn-primary" onClick={() => setIsTourOpen(true)}>
+                                    Open Tour Guide
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Tour
+                steps={steps}
+                isOpen={isTourOpen}
+                onRequestClose={() => setIsTourOpen(false)}
+                accentColor={accentColor}
+                onAfterOpen={disableBody}
+                onBeforeClose={enableBody}
+            />
         </div>
     )
 }

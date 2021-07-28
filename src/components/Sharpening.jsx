@@ -1,61 +1,70 @@
 import React, { useState, useEffect, useRef } from 'react'
-import cv from "@techstark/opencv-js";
+// import cv from "@techstark/opencv-js";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
-import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
-import { downloadImageOutput } from '../utils/downloadImage'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
+import axios from "axios";
+import RenderKernel from './RenderKernel';
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
-const HighPass = () => {
-    const [imageSrc, setImageSrc] = useState("")
+const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(file)
+
+        fileReader.onload = () => {
+            resolve(fileReader.result.substr(fileReader.result.indexOf(',') + 1))
+        }
+
+        fileReader.onerror = (error) => {
+            reject(error)
+        }
+    })
+}
+
+const Sharpening = () => {
+    const primaryColor = "#fdaa56";
+    const accentColor = "#ef5241";
+    const [imageSrc, setImageSrc] = useState(null)
+    const [imageDst, setImageDst] = useState(null)
     const [errorMessage, setErrorMessage] = useState('');
     const [kernelSize, setKernelSize] = useState(3)
     const [kernel, setKernel] = useState([])
+    const [kernelRender, setKernelRender] = useState([])
     const [filter, setFilter] = useState("")
-    const canvasRef = useRef()
+    const outputImageRef = useRef()
     const downloadButtonRef = useRef()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // if (!imageSrc) {
-        //     return;
-        // }
-        let src = cv.imread('imageSrc');
-        let dst = new cv.Mat();
-        let gray = new cv.Mat();
-        let M = cv.Mat.eye(3, 3, cv.CV_32FC1);
 
-        let ksize = new cv.Size(parseInt(kernelSize), parseInt(kernelSize))
-        if (filter === "Laplacian") {
-            cv.cvtColor(src, gray, cv.COLOR_RGB2GRAY, 0);
-            cv.Laplacian(gray, dst, cv.CV_8U, parseInt(kernelSize));
-        }
-        else if (filter === "Custom") {
-            let arrayKernel = arrayObjectFlatten(kernel)
-            let sumKernel = arrayKernel.reduce(function (total, value) {
+        if (filter === "Custom") {
+            let arrayKernel = kernel.map(e => e.value.map(f => f.value));
+            let sumKernel = arrayKernel.flat().reduce(function (total, value) {
                 return parseInt(total) + parseInt(value);
-            }, 0);
+            }, 0)
             if (parseInt(sumKernel) != 0 && parseInt(sumKernel) != 1) {
                 setErrorMessage("Sum of kernel must be 0 or 1!")
             } else {
                 setErrorMessage("")
-                let inputKernel = cv.matFromArray(parseInt(kernelSize), parseInt(kernelSize), cv.CV_32FC1, arrayKernel)
-                let anchor = new cv.Point(-1, -1);
-                cv.cvtColor(src, gray, cv.COLOR_RGB2GRAY, 0);
-                cv.filter2D(gray, dst, cv.CV_8U, inputKernel, anchor, 0, cv.BORDER_DEFAULT);
+                let image = await convertBase64(imageSrc)
+                let type = filter
+                let kernel = arrayKernel
+                axios.post("/api/high-pass/", { image, type, kernel }).then((res) => {
+                    setImageDst(res.data.data)
+                }).catch((err) => console.log(err))
             }
+        } else {
+            let image = await convertBase64(imageSrc)
+            let type = filter
+            axios.post("/api/high-pass/", { image, type }).then((res) => {
+                setImageDst(res.data.data)
+            }).catch((err) => console.log(err));
         }
-        cv.imshow('canvasOutput', dst);
-        src.delete();
-        gray.delete();
-        dst.delete();
-        M.delete();
-    }
 
-    // let isi = [[0.0625, 0.125, 0.0625],
-    // [0.125, 0.25, 0.125],
-    // [0.0625, 0.125, 0.0625]]
+    }
 
     useEffect(() => {
         let kernel = [];
@@ -74,6 +83,44 @@ const HighPass = () => {
         }
         setKernel(kernel);
     }, [kernelSize]);
+
+    const handleSelectFilter = (e) => {
+        e.preventDefault()
+        setFilter(e.target.value)
+        if (e.target.value === "Kernel 1") {
+            let X = [[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]]
+            setKernelRender([
+                { X }
+            ])
+        } else if (e.target.value === "Kernel 2") {
+            let X = [[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]]
+            setKernelRender([
+                { X }
+            ])
+        } else if (e.target.value === "Kernel 3") {
+            let X = [[0, -1, 0], [-1, 8, -1], [0, -1, 0]]
+            setKernelRender([
+                { X }
+            ])
+        } else if (e.target.value === "Kernel 4") {
+            let X = [[1, -2, 1], [-2, 5, -2], [1, -2, 1]]
+            setKernelRender([
+                { X }
+            ])
+        }
+        else if (e.target.value === "Kernel 5") {
+            let X = [[1, -2, 1], [-2, 4, -2], [1, -2, 1]]
+            setKernelRender([
+                { X }
+            ])
+        }
+        else if (e.target.value === "Kernel 6") {
+            let X = [[0, 1, 0], [1, -4, 1], [0, 1, 0]]
+            setKernelRender([
+                { X }
+            ])
+        }
+    }
 
     const handleKernel = (e) => {
         setKernelSize(e.target.value);
@@ -103,9 +150,9 @@ const HighPass = () => {
         <div>
             <NavigationBar></NavigationBar>
             <div className="container-fluid mt-3">
-                <h1 className="text-center fw-bold">High Pass Filter</h1>
+                <h1 className="text-center fw-bold" style={{ color: primaryColor }}>Sharpening</h1>
                 <div className="row mt-1">
-                    <div className="col-lg-8">
+                    <div className="col-lg-8 order-lg-1 order-md-2">
                         <div className="row">
                             <div className="col-lg-12 mb-3">
                                 <div className="card">
@@ -114,7 +161,7 @@ const HighPass = () => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
+                                            <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(e.target.files[0])} />
                                         </form>
                                         <TransformWrapper
                                             initialScale={1}
@@ -128,7 +175,7 @@ const HighPass = () => {
                                                     </div>
                                                     <TransformComponent>
                                                         <div className="image">
-                                                            <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
+                                                            <img id="imageSrc" className="img-fluid" src={imageSrc != null ? URL.createObjectURL(imageSrc) : ''} alt="" />
                                                         </div>
                                                     </TransformComponent>
                                                 </React.Fragment>
@@ -152,10 +199,14 @@ const HighPass = () => {
                                                         <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
                                                         <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
                                                         <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
-                                                        <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
+                                                        <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => {
+                                                            downloadButtonRef.current.href = `data:image/png;base64,${imageDst}`
+                                                            // downloadImageOutput(outputImageRef, downloadButtonRef)
+                                                        }}></a>
                                                     </div>
                                                     <TransformComponent>
-                                                        <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
+                                                        <img src={imageDst != null ? `data:image/png;base64,${imageDst}` : ''} className="img-fluid" ref={outputImageRef} alt="" />
+                                                        {/* <canvas id="canvasOutput" ref={outputImageRef} className="img-fluid image"></canvas> */}
                                                     </TransformComponent>
                                                 </React.Fragment>
                                             )}
@@ -167,16 +218,22 @@ const HighPass = () => {
 
                         </div>
                     </div>
-                    <div className="col-lg-4">
+                    <div className="col-lg-4 order-lg-2 order-md-1 mb-3">
                         <div className="card">
                             <div className="card-header">
                                 Process
                             </div>
                             <div className="card-body">
                                 <form onSubmit={handleSubmit}>
-                                    <select name="noise" id="filter" className="form-control" onChange={(e) => setFilter(e.target.value)} required>
+                                    <select name="noise" id="filter" className="form-control" onChange={(e) => { handleSelectFilter(e) }} required>
                                         <option value="">-Select Filter-</option>
-                                        <option value="Laplacian">Laplacian</option>
+                                        <option value="Laplace">Laplace</option>
+                                        <option value="Kernel 1">Kernel 1</option>
+                                        <option value="Kernel 2">Kernel 2</option>
+                                        <option value="Kernel 3">Kernel 3</option>
+                                        <option value="Kernel 4">Kernel 4</option>
+                                        <option value="Kernel 5">Kernel 5</option>
+                                        <option value="Kernel 6">Kernel 6</option>
                                         <option value="Custom">Custom Filter</option>
                                     </select>
                                     <div className="form-group">
@@ -211,6 +268,9 @@ const HighPass = () => {
                                     {errorMessage && (
                                         <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
                                     )}
+                                    {filter !== "Custom" &&
+                                        <RenderKernel kernel={kernelRender}></RenderKernel>
+                                    }
                                     <div className="d-flex justify-content-between mt-5">
                                         <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
                                         <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
@@ -226,4 +286,4 @@ const HighPass = () => {
     )
 }
 
-export default HighPass
+export default Sharpening

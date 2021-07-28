@@ -4,10 +4,12 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
 import RenderKernel from './RenderKernel';
-import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
+import { array2DFlatten } from '../utils/arrayFlat';
 import { downloadImageOutput } from '../utils/downloadImage'
 
 const EdgeDetection = () => {
+    const primaryColor = "#fdaa56";
+    const accentColor = "#ef5241";
     const [imageSrc, setImageSrc] = useState("")
     const [kernel, setKernel] = useState([])
     const [filter, setFilter] = useState("")
@@ -64,7 +66,6 @@ const EdgeDetection = () => {
         dst.delete();
         M.delete();
     }
-    let elements = [[1, 0, -1], [1, 0, -1], [1, 0, -1]];
 
     const handleSelectFilter = (e) => {
         e.preventDefault()
@@ -100,9 +101,9 @@ const EdgeDetection = () => {
         <div>
             <NavigationBar></NavigationBar>
             <div className="container-fluid mt-3">
-                <h1 className="text-center fw-bold">Edge Detection</h1>
+                <h1 className="text-center fw-bold" style={{ color: primaryColor }}>Edge Detection</h1>
                 <div className="row mt-1">
-                    <div className="col-lg-8">
+                    <div className="col-lg-8 order-lg-1 order-md-2">
                         <div className="row">
                             <div className="col-lg-12 mb-3">
                                 <div className="card">
@@ -165,7 +166,7 @@ const EdgeDetection = () => {
                         </div>
                     </div>
 
-                    <div className="col-lg-4">
+                    <div className="col-lg-4 order-lg-2 order-md-1 mb-3">
                         <div className="card">
                             <div className="card-header">
                                 Process
@@ -182,26 +183,6 @@ const EdgeDetection = () => {
                                     </select>
                                     <div className="row mt-2">
                                         <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
-                                        {/* <div className="col-lg-6">
-                                            <div className="row">
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> */}
-                                        {/* <div className="col-lg-6"></div> */}
                                     </div>
                                     <div className="d-flex justify-content-between mt-5">
                                         <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
