@@ -4,7 +4,6 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
 import RenderKernel from './RenderKernel';
-import { arrayObjectFlatten, array2DFlatten } from '../utils/arrayFlat';
 import { downloadImageOutput } from '../utils/downloadImage'
 
 const OtherEffect = () => {
