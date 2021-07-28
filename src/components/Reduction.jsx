@@ -192,7 +192,7 @@ const Reduction = () => {
             <div className="container-fluid mt-3">
                 <h1 className="text-center fw-bold first-step" style={{ color: primaryColor }}>Reduction/Smoothing</h1>
                 <div className="row mt-1">
-                    <div className="col-lg-8 order-lg-1 order-md-2">
+                    <div className="col-lg-8 order-lg-1 order-md-2 order-sm-2 order-xs-2">
                         <div className="row">
                             <div className="col-lg-12 mb-3">
                                 <div className="card">
@@ -259,7 +259,7 @@ const Reduction = () => {
                         </div>
                     </div>
                     <div className="col-lg-4 order-lg-2 order-md-1">
-                        <div className="">
+                        <div className="sticky-top" style={{ top: 15 + 'px', zIndex: 999 }}>
                             <div className="card">
                                 <div className="card-header">
                                     Process
@@ -351,7 +351,7 @@ const Reduction = () => {
                                 </div>
                             </div>
                             <div className="d-flex justify-content-center my-3">
-                                <button className="btn fw-500 btn-lg btn-primary" onClick={() => setIsTourOpen(true)}>
+                                <button className="btn fw-500 btn-lg btn-primary d-none d-lg-block d-xl-block" onClick={() => setIsTourOpen(true)}>
                                     Open Tour Guide
                                 </button>
                             </div>
@@ -364,8 +364,8 @@ const Reduction = () => {
                 isOpen={isTourOpen}
                 onRequestClose={() => setIsTourOpen(false)}
                 accentColor={accentColor}
-                onAfterOpen={disableBody}
-                onBeforeClose={enableBody}
+            // onAfterOpen={disableBody}
+            // onBeforeClose={enableBody}
             />
         </div>
     )

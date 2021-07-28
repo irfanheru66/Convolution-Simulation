@@ -137,45 +137,27 @@ const OtherEffect = () => {
                     </div>
 
                     <div className="col-lg-4 order-lg-2 order-md-1 mb-3">
-                        <div className="card">
-                            <div className="card-header">
-                                Process
-                            </div>
-                            <div className="card-body">
-                                <form onSubmit={handleSubmit}>
-                                    <select name="noise" id="filter" className="form-control" onChange={(e) => handleSelectFilter(e)} required>
-                                        <option value="">-Select Filter-</option>
-                                        <option value="Emboss">Emboss Filter</option>
-                                        <option value="Sephia">Sephia Filter</option>
-                                    </select>
-                                    <div className="row mt-2">
-                                        <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
-                                        {/* <div className="col-lg-6">
-                                            <div className="row">
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                                <div className="col-lg-3">
-                                                    <div className="bg-white text-center fw-bold">
-                                                        4
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div> */}
-                                        {/* <div className="col-lg-6"></div> */}
-                                    </div>
-                                    <div className="d-flex justify-content-between mt-5">
-                                        <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
-                                        <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
-                                    </div>
-                                </form>
+                        <div className="sticky-top" style={{ top: 15 + 'px', zIndex: 999 }}>
+                            <div className="card">
+                                <div className="card-header">
+                                    Process
+                                </div>
+                                <div className="card-body">
+                                    <form onSubmit={handleSubmit}>
+                                        <select name="noise" id="filter" className="form-control" onChange={(e) => handleSelectFilter(e)} required>
+                                            <option value="">-Select Filter-</option>
+                                            <option value="Emboss">Emboss Filter</option>
+                                            <option value="Sephia">Sephia Filter</option>
+                                        </select>
+                                        <div className="row mt-2">
+                                            <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
+                                        </div>
+                                        <div className="d-flex justify-content-between mt-5">
+                                            <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
+                                            <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
