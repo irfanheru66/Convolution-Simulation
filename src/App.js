@@ -10,6 +10,7 @@ import OtherEffect from './components/OtherEffect';
 import Sharpening from './components/Sharpening';
 import WatchModal from './components/WatchModal';
 import FeedbackModal from './components/FeedbackModal';
+import Team from './components/Team';
 
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
             <Switch>
               <Route exact path="/">
                 <Home></Home>
+              </Route>
+              <Route exact path="/team">
+                <Team setModalFeedbackShow={setModalFeedbackShow}></Team>
               </Route>
               <Route exact path="/noise-reduction">
                 <Reduction setModalShow={setModalShow} setModalFeedbackShow={setModalFeedbackShow}></Reduction>

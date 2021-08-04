@@ -2,6 +2,7 @@
     --red-primary: #ef5241;
     --red-darker: #c52514;
     --orange-primary: #fdaa56;
+    --orange-secondary: #f4b474;
     --orange-light: #f4b474;
     --red-light: #f4977c;
     --white-primary: #fffaeb;
@@ -30,7 +31,7 @@ body {
       padding-left: 0;
 }
 .modal-content{
-    background-color: var(--orange-primary);
+    background-color: var(--orange-secondary);
     color: #fff;
 }
 .navbar-collapse.collapse.show {
@@ -199,7 +200,7 @@ a.dropdown-item {
 }
 
 .card {
-    background-color: var(--orange-primary);
+    background-color: var(--orange-secondary);
     border-radius: 16px;
     border: none;
 }
