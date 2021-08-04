@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../assets/img/VolugeSIMLogo (1).png'
-
+import logo from '../assets/img/Untitled-4 putih.png'
+import logoitenas from '../assets/img/logo-itenas-2.png'
 const NavigationBar = (props) => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light" id="navbar">
+        <nav className="navbar navbar-expand-lg navbar-light py-4" id="navbar">
             <div className="container">
                 <Link className="navbar-brand text-primary" to="/">
-                    <img src={logo} width="120px" height="120px" alt="" />
+                    <img src={logoitenas} className="img-fluid" style={{ maxWidth: 200 + "px" }} />
                 </Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

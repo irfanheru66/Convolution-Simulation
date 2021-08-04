@@ -66,7 +66,7 @@ const Sharpening = (props) => {
             }, 0)
             setTotalCoeff(sumKernel)
             if (parseInt(sumKernel) != 0 && parseInt(sumKernel) != 1) {
-                setErrorMessage("Sum of kernel must be 0 or 1!")
+                setErrorMessage("Coefficient of kernel must be 0 or 1!")
             } else {
                 setErrorMessage("")
                 let image = await convertBase64(imageSrc)
@@ -107,7 +107,7 @@ const Sharpening = (props) => {
             return parseFloat(total) + parseFloat(value);
         }, 0)
         if (total > 1) {
-            setErrorMessage("Sum of kernel must be 0 or 1!")
+            setErrorMessage("Coefficient of kernel must be 0 or 1!")
         } else {
             setErrorMessage("")
         }
@@ -283,13 +283,13 @@ const Sharpening = (props) => {
                                                 </div>
                                             );
                                         })}
-                                        {errorMessage && filter === "Custom" && (
-                                            <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
-                                        )}
                                         {filter === "Custom" && (
                                             <div>
                                                 <p className="text-white fs-5">Total Coefficient Kernel : <b className="text-dark">{totalCoeff.toFixed(1)}</b></p>
                                             </div>
+                                        )}
+                                        {errorMessage && filter === "Custom" && (
+                                            <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
                                         )}
                                         {filter !== "Custom" &&
                                             <RenderKernel kernel={kernelRender}></RenderKernel>

@@ -109,11 +109,6 @@ a.dropdown-item {
     color: var(--white-full);
 }
 
-.navbar {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-}
-
 .hero-caption {
     padding-left: 7rem;
 }

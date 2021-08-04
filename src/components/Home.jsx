@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import '../assets/css/styles.css';
 import ImageBanner from '../assets/img/image-side-2-removebg-preview.png'
 import ImageBanner2 from '../assets/img/image-banner.png'
-import LogoItenas from '../assets/img/logo-itenas.png'
+import LogoItenas from '../assets/img/logo-itenas-2.png'
 import { motion } from 'framer-motion';
 
 const containerVariants = {
@@ -48,7 +48,7 @@ const Home = () => {
                             </div>
                             <div className="hero-caption" style={{ marginTop: 50 + 'px' }}>
                                 <h1 className="text-white font-weight-bold mb-4 aos-init aos-animate" data-aos="fade-up"
-                                    data-aos-delay="0">Convolution Image Simulation</h1>
+                                    data-aos-delay="0">Image Convolution Simulation</h1>
                                 <p className="mb-4 aos-init aos-animate" style={{ letterSpacing: 1.7 + 'px' }} data-aos="fade-up"
                                     data-aos-delay="100">
                                     Do you want to know how image convolution works in a more interesting way? So let's
