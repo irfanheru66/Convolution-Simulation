@@ -41,9 +41,9 @@ const OtherEffect = (props) => {
         let M = cv.Mat.eye(3, 3, cv.CV_32FC1);
         if (filter === "Emboss") {
             let inputKernel = [
-                0, -1, -1,
-                1, 0, -1,
-                1, 1, 0,
+                -2, -1, 0,
+                -1, 1, 1,
+                0, 1, 2,
             ]
             cv.cvtColor(src, src, cv.COLOR_RGB2GRAY, 0);
             let embos = cv.matFromArray(3, 3, cv.CV_32FC1, inputKernel);
@@ -68,7 +68,7 @@ const OtherEffect = (props) => {
         e.preventDefault()
         setFilter(e.target.value)
         if (e.target.value === "Emboss") {
-            let X = [[0, -1, -1], [1, 0, -1], [1, 1, 0]]
+            let X = [[-2, -1, 0], [-1, 1, 1], [0, 1, 2]]
             setKernel([
                 { X }
             ])
