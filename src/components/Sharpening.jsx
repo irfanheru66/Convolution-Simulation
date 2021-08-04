@@ -6,6 +6,10 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
 import axios from "axios";
 import RenderKernel from './RenderKernel';
+import Footer from './Footer';
+import { arrayObjectFlatten } from '../utils/arrayFlat';
+import { motion } from 'framer-motion';
+
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 
@@ -24,13 +28,28 @@ const convertBase64 = (file) => {
     })
 }
 
-const Sharpening = () => {
+const containerVariants = {
+    hidden: {
+        opacity: 0
+    },
+    visible: {
+        opacity: 1,
+        transition: {
+            type: 'spring',
+            delay: 0.3,
+            when: "beforeChildren",
+            staggerChildren: 0.4
+        }
+    }
+}
+
+const Sharpening = (props) => {
     const primaryColor = "#fdaa56";
-    const accentColor = "#ef5241";
     const [imageSrc, setImageSrc] = useState(null)
     const [imageDst, setImageDst] = useState(null)
     const [errorMessage, setErrorMessage] = useState('');
     const [kernelSize, setKernelSize] = useState(3)
+    const [totalCoeff, setTotalCoeff] = useState(0)
     const [kernel, setKernel] = useState([])
     const [kernelRender, setKernelRender] = useState([])
     const [filter, setFilter] = useState("")
@@ -45,6 +64,7 @@ const Sharpening = () => {
             let sumKernel = arrayKernel.flat().reduce(function (total, value) {
                 return parseInt(total) + parseInt(value);
             }, 0)
+            setTotalCoeff(sumKernel)
             if (parseInt(sumKernel) != 0 && parseInt(sumKernel) != 1) {
                 setErrorMessage("Sum of kernel must be 0 or 1!")
             } else {
@@ -82,48 +102,43 @@ const Sharpening = () => {
             }
         }
         setKernel(kernel);
+        const arrayKernel = arrayObjectFlatten(kernel)
+        const total = arrayKernel.flat().reduce(function (total, value) {
+            return parseFloat(total) + parseFloat(value);
+        }, 0)
+        if (total > 1) {
+            setErrorMessage("Sum of kernel must be 0 or 1!")
+        } else {
+            setErrorMessage("")
+        }
+        setTotalCoeff(total)
     }, [kernelSize]);
 
     const handleSelectFilter = (e) => {
         e.preventDefault()
         setFilter(e.target.value)
         if (e.target.value === "Kernel 1") {
-            let X = [[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]]
-            setKernelRender([
-                { X }
-            ])
-        } else if (e.target.value === "Kernel 2") {
             let X = [[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]]
             setKernelRender([
                 { X }
             ])
-        } else if (e.target.value === "Kernel 3") {
+        } else if (e.target.value === "Kernel 2") {
             let X = [[0, -1, 0], [-1, 8, -1], [0, -1, 0]]
             setKernelRender([
                 { X }
             ])
-        } else if (e.target.value === "Kernel 4") {
+        } else if (e.target.value === "Kernel 3") {
             let X = [[1, -2, 1], [-2, 5, -2], [1, -2, 1]]
             setKernelRender([
                 { X }
             ])
         }
-        else if (e.target.value === "Kernel 5") {
-            let X = [[1, -2, 1], [-2, 4, -2], [1, -2, 1]]
-            setKernelRender([
-                { X }
-            ])
-        }
-        else if (e.target.value === "Kernel 6") {
-            let X = [[0, 1, 0], [1, -4, 1], [0, 1, 0]]
-            setKernelRender([
-                { X }
-            ])
-        }
+        setErrorMessage("")
     }
 
     const handleKernel = (e) => {
         setKernelSize(e.target.value);
+        setErrorMessage("")
     };
 
     const updateKernel = (index, index2) => (e) => {
@@ -147,8 +162,12 @@ const Sharpening = () => {
     };
 
     return (
-        <div>
-            <NavigationBar></NavigationBar>
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <NavigationBar setModalFeedbackShow={props.setModalFeedbackShow}></NavigationBar>
             <div className="container-fluid mt-3">
                 <h1 className="text-center fw-bold" style={{ color: primaryColor }}>Sharpening</h1>
                 <div className="row mt-1">
@@ -161,7 +180,8 @@ const Sharpening = () => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(e.target.files[0])} />
+                                            <motion.input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(e.target.files[0])} whileHover={{ scale: 1.1, x: 15 }}
+                                                whileTap={{ scale: 0.95 }} />
                                         </form>
                                         <TransformWrapper
                                             initialScale={1}
@@ -205,7 +225,7 @@ const Sharpening = () => {
                                                         }}></a>
                                                     </div>
                                                     <TransformComponent>
-                                                        <img src={imageDst != null ? `data:image/png;base64,${imageDst}` : ''} className="img-fluid" ref={outputImageRef} alt="" />
+                                                        <img src={imageDst != null ? `data:image/png;base64,${imageDst}` : ''} className="img-fluid" style={{ minHeight: 150 + 'px' }} ref={outputImageRef} alt="" />
                                                         {/* <canvas id="canvasOutput" ref={outputImageRef} className="img-fluid image"></canvas> */}
                                                     </TransformComponent>
                                                 </React.Fragment>
@@ -232,12 +252,9 @@ const Sharpening = () => {
                                             <option value="Kernel 1">Kernel 1</option>
                                             <option value="Kernel 2">Kernel 2</option>
                                             <option value="Kernel 3">Kernel 3</option>
-                                            <option value="Kernel 4">Kernel 4</option>
-                                            <option value="Kernel 5">Kernel 5</option>
-                                            <option value="Kernel 6">Kernel 6</option>
                                             <option value="Custom">Custom Filter</option>
                                         </select>
-                                        <div className="form-group">
+                                        {filter === "Custom" && <div className="form-group">
                                             <label for="">Kernel Size</label>
                                             <div className="d-flex">
                                                 <div className="kernel">
@@ -247,7 +264,7 @@ const Sharpening = () => {
                                                     <input type="range" step="2" name="range" min="3" max="7" value={kernelSize} className="slider" onChange={(e) => handleKernel(e)} />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>}
                                         {filter === "Custom" && kernel.map((row, index) => {
                                             return (
                                                 <div className="row-custom mt-3" key={row.id}>
@@ -266,15 +283,22 @@ const Sharpening = () => {
                                                 </div>
                                             );
                                         })}
-                                        {errorMessage && (
+                                        {errorMessage && filter === "Custom" && (
                                             <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
+                                        )}
+                                        {filter === "Custom" && (
+                                            <div>
+                                                <p className="text-white fs-5">Total Coefficient Kernel : <b className="text-dark">{totalCoeff.toFixed(1)}</b></p>
+                                            </div>
                                         )}
                                         {filter !== "Custom" &&
                                             <RenderKernel kernel={kernelRender}></RenderKernel>
                                         }
                                         <div className="d-flex justify-content-between mt-5">
-                                            <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
-                                            <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
+                                            <motion.button className="btn btn-submit px-5 btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
+                                            <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}>Apply</motion.button>
                                         </div>
                                     </form>
                                 </div>
@@ -284,7 +308,8 @@ const Sharpening = () => {
 
                 </div>
             </div>
-        </div >
+            <Footer></Footer>
+        </motion.div>
     )
 }
 

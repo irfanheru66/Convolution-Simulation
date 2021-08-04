@@ -5,10 +5,26 @@ import NavigationBar from './NavigationBar'
 import '../assets/css/styles.css';
 import RenderKernel from './RenderKernel';
 import { downloadImageOutput } from '../utils/downloadImage'
+import Footer from './Footer';
+import { motion } from 'framer-motion';
 
-const OtherEffect = () => {
+const containerVariants = {
+    hidden: {
+        opacity: 0
+    },
+    visible: {
+        opacity: 1,
+        transition: {
+            type: 'spring',
+            delay: 0.3,
+            when: "beforeChildren",
+            staggerChildren: 0.4
+        }
+    }
+}
+
+const OtherEffect = (props) => {
     const primaryColor = "#fdaa56";
-    const accentColor = "#ef5241";
     const [imageSrc, setImageSrc] = useState("")
     const [kernel, setKernel] = useState([])
     const [filter, setFilter] = useState("")
@@ -68,8 +84,12 @@ const OtherEffect = () => {
     }
 
     return (
-        <div>
-            <NavigationBar></NavigationBar>
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <NavigationBar setModalFeedbackShow={props.setModalFeedbackShow}></NavigationBar>
             <div className="container-fluid mt-3">
                 <h1 className="text-center fw-bold" style={{ color: primaryColor }}>Other Effects</h1>
                 <div className="row mt-1">
@@ -82,7 +102,11 @@ const OtherEffect = () => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} />
+                                            <motion.input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => {
+                                                setImageSrc(URL.createObjectURL(e.target.files[0]))
+                                            }
+                                            } whileHover={{ scale: 1.1, x: 15 }}
+                                                whileTap={{ scale: 0.95 }} />
                                         </form>
                                         <TransformWrapper
                                             initialScale={1}
@@ -131,8 +155,6 @@ const OtherEffect = () => {
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
 
@@ -153,8 +175,10 @@ const OtherEffect = () => {
                                             <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
                                         </div>
                                         <div className="d-flex justify-content-between mt-5">
-                                            <a className="btn btn-submit px-5 btn-primary">Watch How It Works </a>
-                                            <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
+                                            <motion.button className="btn btn-submit px-5 btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
+                                            <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}>Apply</motion.button>
                                         </div>
                                     </form>
                                 </div>
@@ -163,7 +187,8 @@ const OtherEffect = () => {
                     </div>
                 </div>
             </div>
-        </div>
+            <Footer></Footer>
+        </motion.div>
     )
 }
 

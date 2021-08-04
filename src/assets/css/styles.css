@@ -13,7 +13,29 @@ body {
     background-color: var(--white-primary);
     font-family: 'Economica', sans-serif;
 }
-
+.text-accent{
+    color:  var(--red-primary);
+    transition: .5s ease-in-out;
+}
+.text-accent:hover{
+    color:  var(--red-darker);
+}
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;  
+}
+.no-gutters > .col,
+.no-gutters  > [class*="col-"] {
+      padding-right: 0;
+      padding-left: 0;
+}
+.modal-content{
+    background-color: var(--orange-primary);
+    color: #fff;
+}
+.navbar-collapse.collapse.show {
+    margin-bottom: 20px;
+}
 .hero {
     background: var(--orange-primary);
     position: relative;
@@ -32,6 +54,10 @@ body {
     color: #fff;
 }
 
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover{
+    color: var(--red-primary);
+}
+
 .dropdown-xl .dropdown-menu {
     background: var(--orange-primary);
 }
@@ -47,6 +73,17 @@ body {
     background-size: cover;
     background-position: bottom right;
     background-repeat: no-repeat;
+}
+.btn-check:focus+.btn-primary, .btn-primary:focus{
+    box-shadow: none;
+}
+.btn-check:active+.btn-primary, .btn-check:checked+.btn-primary, .btn-primary.active, .btn-primary:active, .show>.btn-primary.dropdown-toggle{
+    background-color: var(--red-primary);
+    border: 1px solid var(--red-primary);
+}
+
+.btn-check:active+.btn-primary:focus, .btn-check:checked+.btn-primary:focus, .btn-primary.active:focus, .btn-primary:active:focus, .show>.btn-primary.dropdown-toggle:focus{
+    box-shadow: none;
 }
 
 a.btn-primary,

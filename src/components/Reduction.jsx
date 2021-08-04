@@ -1,11 +1,21 @@
+// library
 import React, { useState, useEffect, useRef } from 'react'
 import cv from "@techstark/opencv-js";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
 import Tour from "reactour";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
-import NavigationBar from './NavigationBar'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { motion } from 'framer-motion';
+
+// style
 import '../assets/css/styles.css';
+
+// Components
+import NavigationBar from './NavigationBar'
+import Footer from './Footer';
+
+// Utilities
 import { arrayObjectFlatten } from '../utils/arrayFlat';
 import { downloadImageOutput } from '../utils/downloadImage'
 
@@ -40,12 +50,28 @@ const steps = [
     },
 ];
 
-const Reduction = () => {
+const containerVariants = {
+    hidden: {
+        opacity: 0
+    },
+    visible: {
+        opacity: 1,
+        transition: {
+            type: 'spring',
+            delay: 0.5,
+            when: "beforeChildren",
+            staggerChildren: 0.4
+        }
+    }
+}
+
+const Reduction = (props) => {
     const primaryColor = "#fdaa56";
     const accentColor = "#ef5241";
     const [imageSrc, setImageSrc] = useState("")
     const [kernelSize, setKernelSize] = useState(3)
     const [errorMessage, setErrorMessage] = useState('');
+    const [totalCoeff, setTotalCoeff] = useState(0)
     const [kernel, setKernel] = useState([])
     const [kernelRender, setKernelRender] = useState([])
     const [kernelCustom, setKernelCustom] = useState([])
@@ -78,12 +104,11 @@ const Reduction = () => {
             cv.filter2D(gray, dst, -1, inputKernel);
         }
         else if (filter === "Custom") {
-            // console.log(arrayObjectFlatten(kernel))
             let arrayKernel = arrayObjectFlatten(kernelCustom)
             let sumKernel = arrayKernel.reduce(function (total, value) {
                 return parseFloat(total) + parseFloat(value);
             }, 0);
-            console.log(sumKernel)
+            setTotalCoeff(sumKernel)
             if (parseFloat(sumKernel) > 1) {
                 setErrorMessage("Maximum number of kernel coefficients 1")
             } else if (parseFloat(sumKernel) <= 1) {
@@ -160,6 +185,16 @@ const Reduction = () => {
             }
         }
         setKernelCustom(kernel);
+        const arrayKernel = arrayObjectFlatten(kernel)
+        const total = arrayKernel.flat().reduce(function (total, value) {
+            return parseFloat(total) + parseFloat(value);
+        }, 0)
+        if (total > 1) {
+            setErrorMessage("Maximum number of kernel coefficients 1")
+        } else {
+            setErrorMessage("")
+        }
+        setTotalCoeff(total)
     }, [kernelSize]);
 
     const handleKernel = (e) => {
@@ -187,10 +222,18 @@ const Reduction = () => {
     };
 
     return (
-        <div>
-            <NavigationBar></NavigationBar>
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            <NavigationBar setModalFeedbackShow={props.setModalFeedbackShow}></NavigationBar>
             <div className="container-fluid mt-3">
-                <h1 className="text-center fw-bold first-step" style={{ color: primaryColor }}>Reduction/Smoothing</h1>
+                <motion.h1 className="text-center fw-bold first-step"
+
+                    style={{ color: primaryColor }}>
+                    Reduction/Smoothing
+                </motion.h1>
                 <div className="row mt-1">
                     <div className="col-lg-8 order-lg-1 order-md-2 order-sm-2 order-xs-2">
                         <div className="row">
@@ -201,8 +244,9 @@ const Reduction = () => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <input type="file" id="fileInput" name="file" className="second-step custom-file-input" onChange={(e) =>
-                                                setImageSrc(URL.createObjectURL(e.target.files[0]))} />
+                                            <motion.input type="file" id="fileInput" name="file" className="second-step custom-file-input" onChange={(e) =>
+                                                setImageSrc(URL.createObjectURL(e.target.files[0]))} whileHover={{ scale: 1.1, x: 15 }}
+                                                whileTap={{ scale: 0.95 }} />
                                         </form>
 
                                         <TransformWrapper
@@ -211,9 +255,36 @@ const Reduction = () => {
                                             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                                                 <React.Fragment>
                                                     <div className="icon third-step">
-                                                        <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
-                                                        <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
-                                                        <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            delay={{ show: 150, hide: 200 }}
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    Zoom In
+                                                                </Tooltip>}
+                                                        >
+                                                            <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            delay={{ show: 150, hide: 200 }}
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    Zoom Out
+                                                                </Tooltip>}
+                                                        >
+                                                            <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            delay={{ show: 150, hide: 200 }}
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    Reset Aspect Ratio
+                                                                </Tooltip>}
+                                                        >
+                                                            <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                        </OverlayTrigger>
                                                     </div>
                                                     <TransformComponent>
                                                         <div className="image">
@@ -240,10 +311,46 @@ const Reduction = () => {
                                             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                                                 <React.Fragment>
                                                     <div className="icon">
-                                                        <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
-                                                        <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
-                                                        <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
-                                                        <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            delay={{ show: 150, hide: 200 }}
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    Zoom In
+                                                                </Tooltip>}
+                                                        >
+                                                            <i className="bi bi-zoom-in" onClick={() => zoomIn()}></i>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            delay={{ show: 150, hide: 200 }}
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    Zoom Out
+                                                                </Tooltip>}
+                                                        >
+                                                            <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            delay={{ show: 150, hide: 200 }}
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    Reset Aspect Ratio
+                                                                </Tooltip>}
+                                                        >
+                                                            <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger
+                                                            placement="top"
+                                                            delay={{ show: 150, hide: 200 }}
+                                                            overlay={
+                                                                <Tooltip>
+                                                                    Download Image
+                                                                </Tooltip>}
+                                                        >
+                                                            <a download="coverted.png" ref={downloadButtonRef} className="bi bi-cloud-download" onClick={() => downloadImageOutput(canvasRef, downloadButtonRef)}></a>
+                                                        </OverlayTrigger>
                                                     </div>
                                                     <TransformComponent>
                                                         <canvas id="canvasOutput" ref={canvasRef} className="img-fluid image"></canvas>
@@ -268,6 +375,7 @@ const Reduction = () => {
                                     <form onSubmit={handleSubmit}>
                                         <select name="noise" id="filter" className="form-control fourth-step" onChange={(e) => {
                                             setDirection(null)
+                                            setErrorMessage("")
                                             setFilter(e.target.value)
                                         }} required>
                                             <option value="">-Select Filter-</option>
@@ -315,6 +423,12 @@ const Reduction = () => {
                                             );
                                         })}
 
+                                        {filter === "Custom" && (
+                                            <div>
+                                                <p className="text-white fs-5">Total Coefficient Kernel : <b className="text-dark">{totalCoeff.toFixed(5)}</b></p>
+                                            </div>
+                                        )}
+
                                         {direction !== null &&
                                             <div className="col-lg-12">
                                                 <div className="row">
@@ -340,20 +454,23 @@ const Reduction = () => {
                                             </div>
                                         }
 
-                                        {errorMessage && (
+                                        {errorMessage && filter === "Custom" && (
                                             <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
                                         )}
                                         <div className="d-flex justify-content-between mt-5 sixth-step">
-                                            <a className="btn btn-submit btn-primary">Watch How It Works </a>
-                                            <button className="btn btn-submit px-5 btn-primary" id="apply" type="submit">Apply</button>
+                                            <motion.button className="btn btn-submit btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
+                                            <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}>Apply</motion.button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                             <div className="d-flex justify-content-center my-3">
-                                <button className="btn fw-500 btn-lg btn-primary d-none d-lg-block d-xl-block" onClick={() => setIsTourOpen(true)}>
+                                <motion.button className="btn fw-500 btn-lg btn-primary d-none d-lg-block d-xl-block" onClick={() => setIsTourOpen(true)} whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.95 }}>
                                     Open Tour Guide
-                                </button>
+                                </motion.button>
                             </div>
                         </div>
                     </div>
@@ -364,10 +481,11 @@ const Reduction = () => {
                 isOpen={isTourOpen}
                 onRequestClose={() => setIsTourOpen(false)}
                 accentColor={accentColor}
-            // onAfterOpen={disableBody}
-            // onBeforeClose={enableBody}
+                onAfterOpen={disableBody}
+                onBeforeClose={enableBody}
             />
-        </div>
+            <Footer></Footer>
+        </motion.div >
     )
 }
 
