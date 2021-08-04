@@ -110,7 +110,7 @@ const Reduction = (props) => {
             }, 0);
             setTotalCoeff(sumKernel)
             if (parseFloat(sumKernel) > 1) {
-                setErrorMessage("Maximum number of kernel coefficients is 1")
+                setErrorMessage("Maximum Total Coefficient of kernel is 1")
             } else if (parseFloat(sumKernel) <= 1) {
                 setErrorMessage("")
             }
@@ -190,7 +190,7 @@ const Reduction = (props) => {
             return parseFloat(total) + parseFloat(value);
         }, 0)
         if (total > 1) {
-            setErrorMessage("Maximum number of kernel coefficients 1")
+            setErrorMessage("Maximum Total Coefficient of kernel is 1")
         } else {
             setErrorMessage("")
         }

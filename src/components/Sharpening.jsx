@@ -107,7 +107,7 @@ const Sharpening = (props) => {
             return parseFloat(total) + parseFloat(value);
         }, 0)
         if (total > 1) {
-            setErrorMessage("Coefficient of kernel must be 0 or 1!")
+            setErrorMessage("Total Coefficient of kernel must be 0 or 1!")
         } else {
             setErrorMessage("")
         }
