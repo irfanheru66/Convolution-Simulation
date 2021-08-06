@@ -1,32 +1,25 @@
+//library
 import React, { useState, useEffect, useRef } from 'react'
-// import cv from "@techstark/opencv-js";
-import NavigationBar from './NavigationBar'
-import '../assets/css/styles.css';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { motion } from 'framer-motion';
 import { v4 as uuidV4 } from "uuid";
 import axios from "axios";
+// import cv from "@techstark/opencv-js";
+
+// assets
+import '../assets/css/styles.css';
+
+// components
+import NavigationBar from './NavigationBar'
 import RenderKernel from './RenderKernel';
 import Footer from './Footer';
+
+// utils
 import { arrayObjectFlatten } from '../utils/arrayFlat';
-import { motion } from 'framer-motion';
+import convertBase64 from '../utils/convertBase64';
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
-
-const convertBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-        const fileReader = new FileReader()
-        fileReader.readAsDataURL(file)
-
-        fileReader.onload = () => {
-            resolve(fileReader.result.substr(fileReader.result.indexOf(',') + 1))
-        }
-
-        fileReader.onerror = (error) => {
-            reject(error)
-        }
-    })
-}
 
 const containerVariants = {
     hidden: {
@@ -180,7 +173,7 @@ const Sharpening = (props) => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <motion.input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(e.target.files[0])} whileHover={{ scale: 1.1, x: 15 }}
+                                            <motion.input type="file" id="fileInput" name="file" className="custom-file-input" accept="image/png, image/jpeg" onChange={(e) => setImageSrc(e.target.files[0])} whileHover={{ scale: 1.1, x: 15 }}
                                                 whileTap={{ scale: 0.95 }} />
                                         </form>
                                         <TransformWrapper

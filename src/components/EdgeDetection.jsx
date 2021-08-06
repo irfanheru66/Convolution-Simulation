@@ -1,13 +1,20 @@
+// library
 import React, { useState, useRef } from 'react'
 import cv from "@techstark/opencv-js";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import NavigationBar from './NavigationBar'
+import { motion } from 'framer-motion';
+
+// assets
 import '../assets/css/styles.css';
+
+// components
+import NavigationBar from './NavigationBar'
 import RenderKernel from './RenderKernel';
+import Footer from './Footer';
+
+// utils
 import { array2DFlatten } from '../utils/arrayFlat';
 import { downloadImageOutput } from '../utils/downloadImage'
-import Footer from './Footer';
-import { motion } from 'framer-motion';
 
 const containerVariants = {
     hidden: {
@@ -138,7 +145,7 @@ const EdgeDetection = (props) => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <motion.input type="file" id="fileInput" name="file" className="custom-file-input" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} whileHover={{ scale: 1.1, x: 15 }}
+                                            <motion.input type="file" id="fileInput" name="file" className="custom-file-input" accept="image/png, image/jpeg" onChange={(e) => setImageSrc(URL.createObjectURL(e.target.files[0]))} whileHover={{ scale: 1.1, x: 15 }}
                                                 whileTap={{ scale: 0.95 }} />
                                         </form>
                                         <TransformWrapper

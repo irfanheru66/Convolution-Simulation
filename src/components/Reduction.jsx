@@ -8,7 +8,7 @@ import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 
-// style
+// assets
 import '../assets/css/styles.css';
 
 // Components
@@ -230,7 +230,6 @@ const Reduction = (props) => {
             <NavigationBar setModalFeedbackShow={props.setModalFeedbackShow}></NavigationBar>
             <div className="container-fluid mt-3">
                 <motion.h1 className="text-center fw-bold first-step"
-
                     style={{ color: primaryColor }}>
                     Reduction/Smoothing
                 </motion.h1>
@@ -244,7 +243,7 @@ const Reduction = (props) => {
                                     </div>
                                     <div className="card-body">
                                         <form action="">
-                                            <motion.input type="file" id="fileInput" name="file" className="second-step custom-file-input" onChange={(e) =>
+                                            <motion.input type="file" id="fileInput" name="file" accept="image/png, image/jpeg" className="second-step custom-file-input" onChange={(e) =>
                                                 setImageSrc(URL.createObjectURL(e.target.files[0]))} whileHover={{ scale: 1.1, x: 15 }}
                                                 whileTap={{ scale: 0.95 }} />
                                         </form>
