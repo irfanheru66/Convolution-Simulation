@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react'
 import cv from "@techstark/opencv-js";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { motion } from 'framer-motion';
+import { Tooltip, OverlayTrigger, Nav, Tab } from 'react-bootstrap';
 
 // assets
 import '../assets/css/styles.css';
@@ -14,6 +15,7 @@ import Footer from './Footer';
 
 // utils
 import { downloadImageOutput } from '../utils/downloadImage'
+//import { Tab } from 'bootstrap';
 
 const containerVariants = {
     hidden: {
@@ -168,34 +170,69 @@ const OtherEffect = (props) => {
                     <div className="col-lg-4 order-lg-2 order-md-1 mb-3">
                         <div className="sticky-top" style={{ top: 15 + 'px', zIndex: 999 }}>
                             <div className="card">
-                                <div className="card-header">
-                                    Process
-                                </div>
-                                <div className="card-body">
-                                    <form onSubmit={handleSubmit}>
-                                        <select name="noise" id="filter" className="form-control" onChange={(e) => handleSelectFilter(e)} required>
-                                            <option value="">-Select Filter-</option>
-                                            <option value="Emboss">Emboss Filter</option>
-                                            <option value="Sephia">Sephia Filter</option>
-                                        </select>
-                                        <div className="row mt-2">
-                                            <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
-                                        </div>
-                                        <div className="d-flex justify-content-between mt-5">
-                                            <motion.button className="btn btn-submit px-5 btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
-                                            <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.95 }}>Apply</motion.button>
-                                        </div>
-                                    </form>
-                                </div>
+                                <Tab.Container defaultActiveKey="process">
+                                    <div className="card-header">
+                                        <Nav variant="pills" >
+
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="process">Process</Nav.Link>
+                                            </Nav.Item>
+
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="documentation">Documentation</Nav.Link>
+                                            </Nav.Item>
+
+                                        </Nav>
+                                    </div>
+                                    <div className="card-body">
+                                        <Tab.Content>
+                                            <Tab.Pane eventKey="process">
+                                                <form onSubmit={handleSubmit}>
+                                                    <select name="noise" id="filter" className="form-control" onChange={(e) => handleSelectFilter(e)} required>
+                                                        <option value="">-Select Filter-</option>
+                                                        <option value="Emboss">Emboss Filter</option>
+                                                        <option value="Sephia">Sephia Filter</option>
+                                                    </select>
+                                                    <div className="row mt-2">
+                                                        <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
+                                                    </div>
+                                                    <div className="d-flex justify-content-between mt-5">
+                                                        <motion.button className="btn btn-submit px-5 btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
+                                                            whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
+                                                        <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
+                                                            whileTap={{ scale: 0.95 }}>Apply</motion.button>
+                                                    </div>
+                                                </form>
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="documentation">
+                                                <h5 className="text-white">List of Documentation</h5>
+                                                <ul className="reset-style custom-style-base custom-style-hover-type-arrow custom-style-hover-animate cursor-pointer">
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/syfe/" target="_blank">Pengenalan Pengolahan Citra Digital</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/tcom/" target="_blank">Pengantar Konvolusi</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/vuik/" target="_blank">Cara kerja konvolusi</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/uyfj/index.html" target="_blank">Kernel Filter</a>
+                                                    </li>
+                                                </ul>
+                                            </Tab.Pane>
+                                        </Tab.Content>
+
+                                    </div>
+                                </Tab.Container>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <Footer></Footer>
-        </motion.div>
+        </motion.div >
     )
 }
 

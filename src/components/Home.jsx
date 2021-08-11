@@ -47,6 +47,12 @@ const Home = () => {
                                 <img src={ImageBanner} alt="" />
                             </div>
                             <div className="hero-caption" style={{ marginTop: 50 + 'px' }}>
+
+                                <div style={{ maxWidth: 200 + 'px' }}>
+                                    <motion.img src={LogoItenas} alt="Logo Itenas" className="img-fluid"
+                                        variants={childVariants} />
+                                </div>
+
                                 <h1 className="text-white font-weight-bold mb-4 aos-init aos-animate" data-aos="fade-up"
                                     data-aos-delay="0">Image Convolution Simulation</h1>
                                 <p className="mb-4 aos-init aos-animate" style={{ letterSpacing: 1.7 + 'px' }} data-aos="fade-up"
@@ -67,12 +73,7 @@ const Home = () => {
 
                                         </motion.div>
                                     </div>
-                                    <div className="col-md-12 col-lg-6 mt-3">
-                                        <div style={{ maxWidth: 200 + 'px' }}>
-                                            <motion.img src={LogoItenas} alt="Logo Itenas" className="img-fluid"
-                                                variants={childVariants} />
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>

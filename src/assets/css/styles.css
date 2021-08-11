@@ -59,6 +59,15 @@ body {
     color: var(--red-primary);
 }
 
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+    color: #fff;
+    background-color: var(--red-primary);
+}
+
+.nav-link, .nav-link:focus, .nav-link:hover{
+    color: var(--red-primary);
+}
+
 .dropdown-xl .dropdown-menu {
     background: var(--orange-primary);
 }
@@ -364,4 +373,45 @@ select.form-control:focus {
     flex-wrap: wrap;
     margin-right: 5px;
     margin-left: 5px;
+}
+@-webkit-keyframes move-right {
+    100% { -webkit-transform: translate(0.5em, 0); }
+}
+@-moz-keyframes move-right {
+    100% { -moz-transform: translate(0.5em, 0); }
+}
+@keyframes move-right {
+    100% { transform: translate(0.5em, 0); }
+}
+ul.reset-style {
+    list-style: none;
+}
+ul.custom-style-base > li{
+    font-size: 20px;   
+}
+ul.custom-style-base > li:hover > a{
+    color: var(--red-primary);
+}
+ul.custom-style-base > li > a{
+    text-decoration: none;
+    color: var(--white-full);
+    transition: .2s ease-in-out ;
+}
+ul.custom-style-base li:before {
+    position: absolute;
+    margin-left: -1.5em;
+    padding-right: 1em;
+    color: rgba(255,0,0,1);
+    content: '\25CF';
+}
+ul.custom-style-hover-color li:hover:before {
+    color: rgba(255,0,0,0.5);
+}
+ul.custom-style-hover-type-arrow li:hover:before {
+    content: '\21D2';
+}
+ul.custom-style-hover-animate li:hover:before {
+    -webkit-animation: move-right 0.5s 0s 1 ease forwards;
+    -moz-animation: move-right 0.5s 0s 1 ease forwards;
+    animation: move-right 0.5s 0s 1 ease forwards;
 }

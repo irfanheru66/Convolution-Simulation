@@ -4,6 +4,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { motion } from 'framer-motion';
 import { v4 as uuidV4 } from "uuid";
 import axios from "axios";
+import { Tooltip, OverlayTrigger, Nav, Tab } from 'react-bootstrap';
 // import cv from "@techstark/opencv-js";
 
 // assets
@@ -234,67 +235,102 @@ const Sharpening = (props) => {
                     <div className="col-lg-4 order-lg-2 order-md-1 mb-3">
                         <div className="sticky-top" style={{ top: 15 + 'px', zIndex: 999 }}>
                             <div className="card">
-                                <div className="card-header">
-                                    Process
-                                </div>
-                                <div className="card-body">
-                                    <form onSubmit={handleSubmit}>
-                                        <select name="noise" id="filter" className="form-control" onChange={(e) => { handleSelectFilter(e) }} required>
-                                            <option value="">-Select Filter-</option>
-                                            <option value="Laplace">Laplace</option>
-                                            <option value="Kernel 1">Kernel 1</option>
-                                            <option value="Kernel 2">Kernel 2</option>
-                                            <option value="Kernel 3">Kernel 3</option>
-                                            <option value="Custom">Custom Filter</option>
-                                        </select>
-                                        {filter === "Custom" && <div className="form-group">
-                                            <label for="">Kernel Size</label>
-                                            <div className="d-flex">
-                                                <div className="kernel">
-                                                    <span id="demo">{`${kernelSize}x${kernelSize}`}</span>
-                                                </div>
-                                                <div className="w-100 ps-2 mt-2">
-                                                    <input type="range" step="2" name="range" min="3" max="7" value={kernelSize} className="slider" onChange={(e) => handleKernel(e)} />
-                                                </div>
-                                            </div>
-                                        </div>}
-                                        {filter === "Custom" && kernel.map((row, index) => {
-                                            return (
-                                                <div className="row-custom mt-3" key={row.id}>
-                                                    {row.value.map(({ id, value }, index_2) => {
+                                <Tab.Container defaultActiveKey="process">
+                                    <div className="card-header">
+                                        <Nav variant="pills" >
+
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="process">Process</Nav.Link>
+                                            </Nav.Item>
+
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="documentation">Documentation</Nav.Link>
+                                            </Nav.Item>
+
+                                        </Nav>
+                                    </div>
+                                    <div className="card-body">
+                                        <Tab.Content>
+                                            <Tab.Pane eventKey="process">
+                                                <form onSubmit={handleSubmit}>
+                                                    <select name="noise" id="filter" className="form-control" onChange={(e) => { handleSelectFilter(e) }} required>
+                                                        <option value="">-Select Filter-</option>
+                                                        <option value="Laplace">Laplace</option>
+                                                        <option value="Kernel 1">Kernel 1</option>
+                                                        <option value="Kernel 2">Kernel 2</option>
+                                                        <option value="Kernel 3">Kernel 3</option>
+                                                        <option value="Custom">Custom Filter</option>
+                                                    </select>
+                                                    {filter === "Custom" && <div className="form-group">
+                                                        <label for="">Kernel Size</label>
+                                                        <div className="d-flex">
+                                                            <div className="kernel">
+                                                                <span id="demo">{`${kernelSize}x${kernelSize}`}</span>
+                                                            </div>
+                                                            <div className="w-100 ps-2 mt-2">
+                                                                <input type="range" step="2" name="range" min="3" max="7" value={kernelSize} className="slider" onChange={(e) => handleKernel(e)} />
+                                                            </div>
+                                                        </div>
+                                                    </div>}
+                                                    {filter === "Custom" && kernel.map((row, index) => {
                                                         return (
-                                                            <span className="input-wrap" key={id}>
-                                                                <input
-                                                                    type="number"
-                                                                    className="form-control"
-                                                                    value={value}
-                                                                    onChange={updateKernel(index, index_2)}
-                                                                />
-                                                            </span>
+                                                            <div className="row-custom mt-3" key={row.id}>
+                                                                {row.value.map(({ id, value }, index_2) => {
+                                                                    return (
+                                                                        <span className="input-wrap" key={id}>
+                                                                            <input
+                                                                                type="number"
+                                                                                className="form-control"
+                                                                                value={value}
+                                                                                onChange={updateKernel(index, index_2)}
+                                                                            />
+                                                                        </span>
+                                                                    );
+                                                                })}
+                                                            </div>
                                                         );
                                                     })}
-                                                </div>
-                                            );
-                                        })}
-                                        {filter === "Custom" && (
-                                            <div>
-                                                <p className="text-white fs-5">Total Coefficient Kernel : <b className="text-dark">{totalCoeff.toFixed(1)}</b></p>
-                                            </div>
-                                        )}
-                                        {errorMessage && filter === "Custom" && (
-                                            <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
-                                        )}
-                                        {filter !== "Custom" &&
-                                            <RenderKernel kernel={kernelRender}></RenderKernel>
-                                        }
-                                        <div className="d-flex justify-content-between mt-5">
-                                            <motion.button className="btn btn-submit px-5 btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
-                                            <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.95 }}>Apply</motion.button>
-                                        </div>
-                                    </form>
-                                </div>
+                                                    {filter === "Custom" && (
+                                                        <div>
+                                                            <p className="text-white fs-5">Total Coefficient Kernel : <b className="text-dark">{totalCoeff.toFixed(1)}</b></p>
+                                                        </div>
+                                                    )}
+                                                    {errorMessage && filter === "Custom" && (
+                                                        <p className="text-danger fw-bold fs-5"> {errorMessage} </p>
+                                                    )}
+                                                    {filter !== "Custom" &&
+                                                        <RenderKernel kernel={kernelRender}></RenderKernel>
+                                                    }
+                                                    <div className="d-flex justify-content-between mt-5">
+                                                        <motion.button className="btn btn-submit px-5 btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
+                                                            whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
+                                                        <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
+                                                            whileTap={{ scale: 0.95 }}>Apply</motion.button>
+                                                    </div>
+                                                </form>
+                                            </Tab.Pane>
+                                            <Tab.Pane eventKey="documentation">
+                                                <h5 className="text-white">List of Documentation</h5>
+                                                <ul className="reset-style custom-style-base custom-style-hover-type-arrow custom-style-hover-animate cursor-pointer">
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/syfe/" target="_blank">Pengenalan Pengolahan Citra Digital</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/tcom/" target="_blank">Pengantar Konvolusi</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/vuik/" target="_blank">Cara kerja konvolusi</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="https://online.flipbuilder.com/ogbjq/uyfj/index.html" target="_blank">Kernel Filter</a>
+                                                    </li>
+                                                </ul>
+                                            </Tab.Pane>
+                                        </Tab.Content>
+
+                                    </div>
+                                </Tab.Container>
+
                             </div>
                         </div>
                     </div>
@@ -302,7 +338,7 @@ const Sharpening = (props) => {
                 </div>
             </div>
             <Footer></Footer>
-        </motion.div>
+        </motion.div >
     )
 }
 
