@@ -2,6 +2,7 @@
   "name": "react-convolution",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://digitalimage.informatics.itenas.ac.id/",
   "proxy": "http://localhost:8000/",
   "dependencies": {
     "@techstark/opencv-js": "^4.5.2-release.1",

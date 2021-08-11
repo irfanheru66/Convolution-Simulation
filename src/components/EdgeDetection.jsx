@@ -235,7 +235,7 @@ const EdgeDetection = (props) => {
                                                         <RenderKernel filter={filter} kernel={kernel}></RenderKernel>
                                                     </div>
                                                     <div className="d-flex justify-content-between mt-5">
-                                                        <motion.button className="btn btn-submit px-5 btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
+                                                        <motion.button className="btn btn-submit btn-primary" onClick={() => props.setModalShow(true)} whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.95 }}>Watch How It Works </motion.button>
                                                         <motion.button className="btn btn-submit px-5 btn-primary" id="apply" type="submit" whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.95 }}>Apply</motion.button>
