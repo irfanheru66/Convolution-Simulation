@@ -21,6 +21,7 @@ import convertBase64 from '../utils/convertBase64';
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.withCredentials = true;
 
 const containerVariants = {
     hidden: {
@@ -66,14 +67,14 @@ const Sharpening = (props) => {
                 let image = await convertBase64(imageSrc)
                 let type = filter
                 let kernel = arrayKernel
-                axios.post("/api/high-pass/", { image, type, kernel }).then((res) => {
+                axios.post("https://convolution-api.herokuapp.com/api/high-pass/", { image, type, kernel }).then((res) => {
                     setImageDst(res.data.data)
                 }).catch((err) => console.log(err))
             }
         } else {
             let image = await convertBase64(imageSrc)
             let type = filter
-            axios.post("/api/high-pass/", { image, type }).then((res) => {
+            axios.post("https://convolution-api.herokuapp.com/api/high-pass/", { image, type }).then((res) => {
                 setImageDst(res.data.data)
             }).catch((err) => console.log(err));
         }
