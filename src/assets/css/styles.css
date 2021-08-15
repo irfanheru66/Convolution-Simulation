@@ -4,7 +4,8 @@
     --orange-primary: #fdaa56;
     --orange-secondary: #f4b474;
     --orange-light: #f4b474;
-    --red-light: #f4977c;
+    --red-light: #f6836b;
+    --red-light-secondary: #f4977c;
     --white-primary: #fffaeb;
     --white-full: #fff;
     --black-full: #000;
@@ -38,11 +39,18 @@ body {
     margin-bottom: 20px;
 }
 .hero {
-    background: var(--orange-primary);
+    background: var(--white-primary);
     position: relative;
-    height: calc(98vh - 200px);
+    height: 100vh;
 }
-
+#navbar {
+    background-color: var(--white-primary);
+    color: var(--red-primary);
+}
+.navbar{
+    /* padding-top: 0 !important; */
+    padding-bottom: 0 !important;
+}
 .navbar-brand {
     font-size: 36px;
     font-weight: bold;
@@ -51,16 +59,18 @@ body {
 }
 
 .navbar-light .navbar-nav .nav-link {
-    font-size: 25px;
-    color: #fff;
+    font-size: 32px;
+    color: var(--white-primary);
 }
-
-.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover{
+.navbar-light .navbar-nav .nav-link:focus{
+    color: var(--white-primary);
+}
+.navbar-light .navbar-nav .nav-link:hover{
     color: var(--red-primary);
 }
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link{
-    color: #fff;
+    color: var(--white-primary);
     background-color: var(--red-primary);
 }
 
@@ -69,9 +79,33 @@ body {
 }
 
 .dropdown-xl .dropdown-menu {
-    background: var(--orange-primary);
+    background: var(--white-primary);
+    color: var(--red-primary);
 }
 
+li.nav-item{
+    margin: 0 5px;
+    /* transition: .2s ease-in-out; */
+}
+li.nav-item.dropdown a.nav-link:hover, li.nav-item.nav-item-link a.nav-link:hover{
+    color: var(--red-primary);
+    background-color: var(--white-primary);
+    padding: 7px 10px;
+    border-radius: 10px;
+}
+a.dropdown-item:hover{
+    color: var(--red-primary);
+    background-color: var(--white-primary);
+    padding: 7px 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+}
+a.dropdown-item {
+    color: var(--red-primary);
+}
+.navbar-nav{
+    background-color: var(--red-light);
+}
 .hero .slant {
     position: absolute;
     width: calc(100% + 2px);
@@ -98,7 +132,7 @@ body {
 
 a.btn-primary,
 button.btn-primary {
-    font-size: 25px;
+    font-size: 32px;
     padding: 0.5rem 1rem;
     background-color: var(--red-primary);
     border: none;
@@ -110,17 +144,8 @@ button.btn-primary:hover {
     border: none;
 }
 
-a.dropdown-item {
-    color: var(--white-full);
-}
-
-#navbar {
-    background-color: var(--orange-primary);
-    color: var(--white-full);
-}
-
 .hero-caption {
-    padding-left: 7rem;
+    padding-left: 10rem;
 }
 
 .hero-caption h1,
@@ -131,10 +156,14 @@ a.dropdown-item {
 
 .hero-caption h1 {
     font-size: 68px;
+    font-weight: bold;
 }
 
-.hero-caption p,
-.hero-caption a {
+.hero-caption p {
+    font-weight: 200;
+    color: var(--red-primary) !important;
+}
+.hero-caption a{
     font-weight: 200;
     color: var(--white-primary) !important;
 }
@@ -156,14 +185,19 @@ a.dropdown-item {
     border: none;
 }
 
-.hero_img,
 .hero-caption {
     margin-top: 150px;
 }
-
+.bg-red-light{
+    background-color: var(--red-light) !important;
+}
 .img-side img {
     height: calc(98vh);
     width: 120%;
+}
+.bg-red-light-shape{
+    background-color: var(--white-primary);
+
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
@@ -209,7 +243,7 @@ a.dropdown-item {
 }
 
 .card {
-    background-color: var(--orange-secondary);
+    background-color: var(--red-light-secondary);
     border-radius: 16px;
     border: none;
 }

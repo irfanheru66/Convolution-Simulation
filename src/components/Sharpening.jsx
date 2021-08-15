@@ -21,7 +21,6 @@ import convertBase64 from '../utils/convertBase64';
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.withCredentials = true;
 
 const containerVariants = {
     hidden: {

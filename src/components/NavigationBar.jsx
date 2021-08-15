@@ -4,10 +4,10 @@ import logo from '../assets/img/Untitled-4 putih.png'
 import logoitenas from '../assets/img/logo-itenas-2.png'
 const NavigationBar = (props) => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light py-4" id="navbar">
-            <div className="container">
+        <nav className="navbar navbar-expand-lg navbar-light" id="navbar">
+            <div className="container-fluid ps-3">
                 <Link className="navbar-brand text-primary" to="/">
-                    <img src={logoitenas} className="img-fluid" style={{ maxWidth: 200 + "px" }} />
+                    <img src={logoitenas} className="img-fluid" style={{ maxWidth: 150 + "px" }} />
                 </Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -20,8 +20,8 @@ const NavigationBar = (props) => {
                     </svg>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav ms-auto me-lg-5">
-                        <li className="nav-item dropdown dropdown-xl no-caret">
+                    <ul className="navbar-nav py-2 ms-auto px-lg-5">
+                        <li className="nav-item nav-item-link dropdown dropdown-xl no-caret">
                             <a className="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Filters
@@ -39,13 +39,35 @@ const NavigationBar = (props) => {
                                 </div>
                             </div>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item nav-item-link dropdown dropdown-xl no-caret">
+                            <a className="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Documentation
+                                <i className="fas fa-chevron-right dropdown-arrow"></i>
+                            </a>
+                            <div className="dropdown-menu dropdown-menu-end animated--fade-in-up"
+                                aria-labelledby="navbarDropdownDemos">
+                                <div className="row g-0">
+                                    <div className="col-lg-12 p-3">
+
+                                        <a className="dropdown-item" style={{ fontSize: 25 + 'px' }} href="https://online.flipbuilder.com/ogbjq/syfe/" target="_blank">Pengenalan Pengolahan Citra Digital</a>
+
+                                        <a className="dropdown-item" style={{ fontSize: 25 + 'px' }} href="https://online.flipbuilder.com/ogbjq/tcom/" target="_blank">Pengantar Konvolusi</a>
+
+                                        <a className="dropdown-item" style={{ fontSize: 25 + 'px' }} href="https://online.flipbuilder.com/ogbjq/vuik/" target="_blank">Cara kerja konvolusi</a>
+
+                                        <a className="dropdown-item" style={{ fontSize: 25 + 'px' }} href="https://online.flipbuilder.com/ogbjq/uyfj/index.html" target="_blank">Kernel Filter</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li className="nav-item nav-item-link">
                             <Link to="/team" className="nav-link">
                                 Team
                             </Link>
 
                         </li>
-                        <li className="nav-item d-flex align-items-center">
+                        <li className="nav-item nav-item-btn d-flex align-items-center">
                             <a className="btn fw-500 ms-lg-4 btn-lg btn-primary" href="#" onClick={() => props.setModalFeedbackShow(true)}>
                                 Feedback
                             </a>
