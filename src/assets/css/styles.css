@@ -34,8 +34,28 @@ body {
     background-color: var(--orange-secondary);
     color: #fff;
 }
+#navbar { 
+    background-color: var(--white-primary);
+    color: var(--white-full);
+}
+.navbar-nav{
+    background-color: var(--orange-primary);
+    border-radius: 10px;
+}
 .navbar-collapse.collapse.show {
     margin-bottom: 20px;
+}
+.dropdown-menu{
+    border-radius: 10px;
+}
+.dropdown-item{
+    margin: 5px 0;
+}
+.dropdown-item:focus, .dropdown-item:hover {
+    color: var(--orange-primary);
+    background-color: var(--white-primary);
+    border-radius: 7px;
+
 }
 .hero {
     background: var(--orange-primary);
@@ -111,11 +131,6 @@ button.btn-primary:hover {
 }
 
 a.dropdown-item {
-    color: var(--white-full);
-}
-
-#navbar {
-    background-color: var(--orange-primary);
     color: var(--white-full);
 }
 

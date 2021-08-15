@@ -1,5 +1,5 @@
 // library
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import cv from "@techstark/opencv-js";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { v4 as uuidV4 } from "uuid";
@@ -7,6 +7,7 @@ import Tour from "reactour";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { Tooltip, OverlayTrigger, Nav, Tab } from 'react-bootstrap';
 import { motion } from 'framer-motion';
+import { useDropzone } from "react-dropzone";
 
 // assets
 import '../assets/css/styles.css';
@@ -49,6 +50,8 @@ const steps = [
         content: 'This section is for displaying the result image',
     },
 ];
+const primaryColor = "#fdaa56";
+const accentColor = "#ef5241";
 
 const containerVariants = {
     hidden: {
@@ -64,11 +67,36 @@ const containerVariants = {
         }
     }
 }
+const baseStyle = {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderColor: '#eeeeee',
+    borderStyle: 'dashed',
+    outline: 'none',
+    transition: 'border .24s ease-in-out'
+};
+
+const activeStyle = {
+    borderColor: accentColor
+};
+
+const acceptStyle = {
+    borderColor: accentColor
+};
+
+const rejectStyle = {
+    borderColor: '#ff1744'
+};
 
 const Reduction = (props) => {
-    const primaryColor = "#fdaa56";
-    const accentColor = "#ef5241";
+
     const [imageSrc, setImageSrc] = useState("")
+    const [dropzoneShow, setDropzoneShow] = useState(true)
     const [kernelSize, setKernelSize] = useState(3)
     const [errorMessage, setErrorMessage] = useState('');
     const [totalCoeff, setTotalCoeff] = useState(0)
@@ -80,6 +108,29 @@ const Reduction = (props) => {
     const canvasRef = useRef()
     const downloadButtonRef = useRef()
     const [isTourOpen, setIsTourOpen] = useState(false);
+
+    const { getRootProps, getInputProps, isDragActive,
+        isDragAccept,
+        isDragReject } = useDropzone({
+            accept: 'image/*',
+            onDrop: acceptedFiles => {
+                setImageSrc(URL.createObjectURL(acceptedFiles[0]))
+                setDropzoneShow(false)
+                console.log("image source", imageSrc)
+            }
+        });
+
+    const style = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragActive ? activeStyle : {}),
+        ...(isDragAccept ? acceptStyle : {}),
+        ...(isDragReject ? rejectStyle : {})
+    }), [
+        isDragActive,
+        isDragReject,
+        isDragAccept
+    ]);
+
 
     const disableBody = target => disableBodyScroll(target);
     const enableBody = target => enableBodyScroll(target);
@@ -242,18 +293,26 @@ const Reduction = (props) => {
                                         Input Image
                                     </div>
                                     <div className="card-body">
-                                        <form action="">
-                                            <motion.input type="file" id="fileInput" name="file" accept="image/png, image/jpeg" className="second-step custom-file-input" onChange={(e) =>
-                                                setImageSrc(URL.createObjectURL(e.target.files[0]))} whileHover={{ scale: 1.1, x: 15 }}
-                                                whileTap={{ scale: 0.95 }} />
-                                        </form>
+                                        {(dropzoneShow == false) && <div className="container">
+                                            <div {...getRootProps({ style })}>
+                                                <div>
+                                                    <input {...getInputProps()} />
+                                                    <button class="btn btn-primary btn-upload" style={{ maxWidth: 225 + "px" }}><i class="fas fa-upload"></i>
+                                                        Upload Image
+                                                    </button>
+                                                </div>
+                                                <div class="mt-2 mb-4 d-none d-md-block">
+                                                    or drop a file
+                                                </div>
+                                            </div>
+                                        </div>}
 
                                         <TransformWrapper
                                             initialScale={1}
                                         >
                                             {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                                                 <React.Fragment>
-                                                    <div className="icon third-step">
+                                                    <div className="icon third-step mt-3">
                                                         <OverlayTrigger
                                                             placement="top"
                                                             delay={{ show: 150, hide: 200 }}
@@ -285,6 +344,31 @@ const Reduction = (props) => {
                                                             <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
                                                         </OverlayTrigger>
                                                     </div>
+                                                    {dropzoneShow &&
+                                                        <div className="container">
+                                                            {/* <div {...getRootProps({ style })}>
+                                                                <input {...getInputProps()} />
+                                                                <p>Drag 'n' drop some files here, or click to select files</p>
+                                                            </div> */}
+                                                            <div class="card card-with-shadow card-rounded-max card-without-border upload-widget-card" {...getRootProps({ style })}>
+                                                                <div class="card-body text-center">
+                                                                    <div class="mt-5 mb-4 d-none d-md-block">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 16" height="16mm" width="22mm"><path d="M.787 6.411l10.012 5.222a.437.437 0 0 0 .402 0l10.01-5.222a.434.434 0 0 0 .186-.585.45.45 0 0 0-.186-.187L11.2.417a.441.441 0 0 0-.404 0L.787 5.639a.439.439 0 0 0-.184.588.453.453 0 0 0 .184.184z" fill="#DDDFE1"></path><path d="M21.21 9.589l-1.655-.864-7.953 4.148a1.31 1.31 0 0 1-1.202 0L2.444 8.725l-1.657.864a.437.437 0 0 0-.184.583.427.427 0 0 0 .184.187l10.012 5.224a.437.437 0 0 0 .402 0l10.01-5.224a.434.434 0 0 0 .186-.586.444.444 0 0 0-.186-.184z" fill="#EDEFF0"></path></svg>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input {...getInputProps()} />
+                                                                        <button class="btn btn-primary btn-upload" style={{ maxWidth: 225 + "px" }}><i class="fas fa-upload"></i>
+                                                                            Upload Image
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="mt-2 mb-4 d-none d-md-block">
+                                                                        or drop a file
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    }
                                                     <TransformComponent>
                                                         <div className="image">
                                                             <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
