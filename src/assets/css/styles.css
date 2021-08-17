@@ -21,6 +21,13 @@ body {
 .text-accent:hover{
     color:  var(--red-darker);
 }
+.text-o-primary{
+    color:  var(--orange-primary);
+    transition: .5s ease-in-out;
+}
+.text-o-primary:hover{
+    color:  var(--orange-primary);
+}
 .no-gutters {
     margin-right: 0;
     margin-left: 0;  
@@ -58,9 +65,9 @@ body {
 
 }
 .hero {
-    background: var(--orange-primary);
+    background: var(--white-primary);
     position: relative;
-    height: calc(98vh - 200px);
+    height: 100vh;
 }
 
 .navbar-brand {
@@ -135,7 +142,7 @@ a.dropdown-item {
 }
 
 .hero-caption {
-    padding-left: 7rem;
+    padding-left: 10rem;
 }
 
 .hero-caption h1,
@@ -146,10 +153,14 @@ a.dropdown-item {
 
 .hero-caption h1 {
     font-size: 68px;
+    font-weight: bold;
 }
 
-.hero-caption p,
-.hero-caption a {
+.hero-caption p {
+    font-weight: 200;
+    color: var(--orange-primary) !important;
+}
+.hero-caption a{
     font-weight: 200;
     color: var(--white-primary) !important;
 }
@@ -171,14 +182,19 @@ a.dropdown-item {
     border: none;
 }
 
-.hero_img,
 .hero-caption {
     margin-top: 150px;
 }
-
+.bg-red-light{
+    background-color: var(--orange-primary) !important;
+}
 .img-side img {
     height: calc(98vh);
     width: 120%;
+}
+.bg-red-light-shape{
+    background-color: var(--white-primary);
+
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
@@ -309,15 +325,7 @@ select.form-control:focus {
     font-size: 20px;
     color: var(--white-full) !important;
     font-weight: 700;
-    margin-top: 15px;
 }
-
-/* [type="range"].slider {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    width: 100% !important;
-} */
 
 .slider {
     -webkit-appearance: none;
@@ -429,4 +437,7 @@ ul.custom-style-hover-animate li:hover:before {
     -webkit-animation: move-right 0.5s 0s 1 ease forwards;
     -moz-animation: move-right 0.5s 0s 1 ease forwards;
     animation: move-right 0.5s 0s 1 ease forwards;
+}
+.text-title{
+    font-family: 'Poppins', sans-serif !important;
 }

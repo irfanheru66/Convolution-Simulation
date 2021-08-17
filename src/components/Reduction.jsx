@@ -280,9 +280,9 @@ const Reduction = (props) => {
         >
             <NavigationBar setModalFeedbackShow={props.setModalFeedbackShow}></NavigationBar>
             <div className="container-fluid mt-3">
-                <motion.h1 className="text-center fw-bold first-step"
+                <motion.h1 className="text-title text-center fw-bold first-step"
                     style={{ color: primaryColor }}>
-                    Reduction/Smoothing
+                    Reduction or Smoothing
                 </motion.h1>
                 <div className="row mt-1">
                     <div className="col-lg-8 order-lg-1 order-md-2 order-sm-2 order-xs-2">
@@ -293,7 +293,7 @@ const Reduction = (props) => {
                                         Input Image
                                     </div>
                                     <div className="card-body">
-                                        {(dropzoneShow == false) && <div className="container">
+                                        {(dropzoneShow == false) && <div className="container second-step">
                                             <div {...getRootProps({ style })}>
                                                 <div>
                                                     <input {...getInputProps()} />
@@ -345,11 +345,7 @@ const Reduction = (props) => {
                                                         </OverlayTrigger>
                                                     </div>
                                                     {dropzoneShow &&
-                                                        <div className="container">
-                                                            {/* <div {...getRootProps({ style })}>
-                                                                <input {...getInputProps()} />
-                                                                <p>Drag 'n' drop some files here, or click to select files</p>
-                                                            </div> */}
+                                                        <div className="container second-step">
                                                             <div class="card card-with-shadow card-rounded-max card-without-border upload-widget-card" {...getRootProps({ style })}>
                                                                 <div class="card-body text-center">
                                                                     <div class="mt-5 mb-4 d-none d-md-block">
@@ -367,7 +363,6 @@ const Reduction = (props) => {
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     }
                                                     <TransformComponent>
                                                         <div className="image">
@@ -382,8 +377,8 @@ const Reduction = (props) => {
                                 </div>
 
                             </div>
-                            <div className="col-lg-12 mb-3">
-                                <div className="card seventh-step">
+                            <div className="col-lg-12 seventh-step mb-3">
+                                <div className="card">
                                     <div className="card-header">
                                         Output Image
                                     </div>
@@ -481,7 +476,7 @@ const Reduction = (props) => {
                                                         <option value="Custom">Custom Filter</option>
                                                     </select>
                                                     <div className="form-group">
-                                                        <label for="">{filter !== "Motion" ? `Kernel Size` : `Direction`}</label>
+                                                        <label for="" className="mt-3">{filter !== "Motion" ? `Kernel Size` : `Direction`} </label>
                                                         <div className="d-flex fifth-step">
                                                             {filter !== "Motion" && <div className="kernel">
                                                                 <span id="demo">{`${kernelSize}x${kernelSize}`}</span>

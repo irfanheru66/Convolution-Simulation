@@ -1,11 +1,12 @@
 //library
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { motion } from 'framer-motion';
 import { v4 as uuidV4 } from "uuid";
 import axios from "axios";
 import { Tooltip, OverlayTrigger, Nav, Tab } from 'react-bootstrap';
 // import cv from "@techstark/opencv-js";
+import { useDropzone } from "react-dropzone";
 
 // assets
 import '../assets/css/styles.css';
@@ -37,9 +38,38 @@ const containerVariants = {
         }
     }
 }
+const primaryColor = "#fdaa56";
+const accentColor = "#ef5241";
+
+const baseStyle = {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderColor: '#eeeeee',
+    borderStyle: 'dashed',
+    outline: 'none',
+    transition: 'border .24s ease-in-out'
+};
+
+const activeStyle = {
+    borderColor: accentColor
+};
+
+const acceptStyle = {
+    borderColor: accentColor
+};
+
+const rejectStyle = {
+    borderColor: '#ff1744'
+};
 
 const Sharpening = (props) => {
     const primaryColor = "#fdaa56";
+    const [dropzoneShow, setDropzoneShow] = useState(true)
     const [imageSrc, setImageSrc] = useState(null)
     const [imageDst, setImageDst] = useState(null)
     const [errorMessage, setErrorMessage] = useState('');
@@ -48,6 +78,28 @@ const Sharpening = (props) => {
     const [kernel, setKernel] = useState([])
     const [kernelRender, setKernelRender] = useState([])
     const [filter, setFilter] = useState("")
+    const { getRootProps, getInputProps, isDragActive,
+        isDragAccept,
+        isDragReject } = useDropzone({
+            accept: 'image/*',
+            onDrop: acceptedFiles => {
+                setImageSrc(URL.createObjectURL(acceptedFiles[0]))
+                setDropzoneShow(false)
+                console.log("image source", imageSrc)
+            }
+        });
+
+    const style = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragActive ? activeStyle : {}),
+        ...(isDragAccept ? acceptStyle : {}),
+        ...(isDragReject ? rejectStyle : {})
+    }), [
+        isDragActive,
+        isDragReject,
+        isDragAccept
+    ]);
+
     const outputImageRef = useRef()
     const downloadButtonRef = useRef()
 
@@ -164,7 +216,7 @@ const Sharpening = (props) => {
         >
             <NavigationBar setModalFeedbackShow={props.setModalFeedbackShow}></NavigationBar>
             <div className="container-fluid mt-3">
-                <h1 className="text-center fw-bold" style={{ color: primaryColor }}>Sharpening</h1>
+                <h1 className="text-title text-center fw-bold" style={{ color: primaryColor }}>Sharpening</h1>
                 <div className="row mt-1">
                     <div className="col-lg-8 order-lg-1 order-md-2">
                         <div className="row">
@@ -174,10 +226,19 @@ const Sharpening = (props) => {
                                         Input Image
                                     </div>
                                     <div className="card-body">
-                                        <form action="">
-                                            <motion.input type="file" id="fileInput" name="file" className="custom-file-input" accept="image/png, image/jpeg" onChange={(e) => setImageSrc(e.target.files[0])} whileHover={{ scale: 1.1, x: 15 }}
-                                                whileTap={{ scale: 0.95 }} />
-                                        </form>
+                                        {(dropzoneShow == false) && <div className="container second-step">
+                                            <div {...getRootProps({ style })}>
+                                                <div>
+                                                    <input {...getInputProps()} />
+                                                    <button class="btn btn-primary btn-upload" style={{ maxWidth: 225 + "px" }}><i class="fas fa-upload"></i>
+                                                        Upload Image
+                                                    </button>
+                                                </div>
+                                                <div class="mt-2 mb-4 d-none d-md-block">
+                                                    or drop a file
+                                                </div>
+                                            </div>
+                                        </div>}
                                         <TransformWrapper
                                             initialScale={1}
                                         >
@@ -188,9 +249,29 @@ const Sharpening = (props) => {
                                                         <i className="bi bi-zoom-out" onClick={() => zoomOut()}></i>
                                                         <i className="bi bi-aspect-ratio" onClick={() => resetTransform()}></i>
                                                     </div>
+                                                    {dropzoneShow &&
+                                                        <div className="container second-step">
+                                                            <div class="card card-with-shadow card-rounded-max card-without-border upload-widget-card" {...getRootProps({ style })}>
+                                                                <div class="card-body text-center">
+                                                                    <div class="mt-5 mb-4 d-none d-md-block">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 16" height="16mm" width="22mm"><path d="M.787 6.411l10.012 5.222a.437.437 0 0 0 .402 0l10.01-5.222a.434.434 0 0 0 .186-.585.45.45 0 0 0-.186-.187L11.2.417a.441.441 0 0 0-.404 0L.787 5.639a.439.439 0 0 0-.184.588.453.453 0 0 0 .184.184z" fill="#DDDFE1"></path><path d="M21.21 9.589l-1.655-.864-7.953 4.148a1.31 1.31 0 0 1-1.202 0L2.444 8.725l-1.657.864a.437.437 0 0 0-.184.583.427.427 0 0 0 .184.187l10.012 5.224a.437.437 0 0 0 .402 0l10.01-5.224a.434.434 0 0 0 .186-.586.444.444 0 0 0-.186-.184z" fill="#EDEFF0"></path></svg>
+                                                                    </div>
+                                                                    <div>
+                                                                        <input {...getInputProps()} />
+                                                                        <button class="btn btn-primary btn-upload" style={{ maxWidth: 225 + "px" }}><i class="fas fa-upload"></i>
+                                                                            Upload Image
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="mt-2 mb-4 d-none d-md-block">
+                                                                        or drop a file
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
                                                     <TransformComponent>
                                                         <div className="image">
-                                                            <img id="imageSrc" className="img-fluid" src={imageSrc != null ? URL.createObjectURL(imageSrc) : ''} alt="" />
+                                                            <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
                                                         </div>
                                                     </TransformComponent>
                                                 </React.Fragment>
@@ -263,7 +344,7 @@ const Sharpening = (props) => {
                                                         <option value="Custom">Custom Filter</option>
                                                     </select>
                                                     {filter === "Custom" && <div className="form-group">
-                                                        <label for="">Kernel Size</label>
+                                                        <label for="" className="mt-3">Kernel Size</label>
                                                         <div className="d-flex">
                                                             <div className="kernel">
                                                                 <span id="demo">{`${kernelSize}x${kernelSize}`}</span>
