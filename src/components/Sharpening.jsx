@@ -83,7 +83,8 @@ const Sharpening = (props) => {
         isDragReject } = useDropzone({
             accept: 'image/*',
             onDrop: acceptedFiles => {
-                setImageSrc(URL.createObjectURL(acceptedFiles[0]))
+                setImageSrc(acceptedFiles[0])
+                // setImageSrc(URL.createObjectURL(acceptedFiles[0]))
                 setDropzoneShow(false)
                 console.log("image source", imageSrc)
             }
@@ -271,7 +272,7 @@ const Sharpening = (props) => {
                                                     }
                                                     <TransformComponent>
                                                         <div className="image">
-                                                            <img id="imageSrc" className="img-fluid" src={imageSrc} alt="" />
+                                                            <img id="imageSrc" className="img-fluid" src={imageSrc != null ? URL.createObjectURL(imageSrc) : ''} alt="" />
                                                         </div>
                                                     </TransformComponent>
                                                 </React.Fragment>
