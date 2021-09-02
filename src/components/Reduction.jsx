@@ -282,7 +282,7 @@ const Reduction = (props) => {
             <div className="container-fluid mt-3">
                 <motion.h1 className="text-title text-center fw-bold first-step"
                     style={{ color: primaryColor }}>
-                    Reduction or Smoothing
+                    Reduction Noise
                 </motion.h1>
                 <div className="row mt-1">
                     <div className="col-lg-8 order-lg-1 order-md-2 order-sm-2 order-xs-2">
