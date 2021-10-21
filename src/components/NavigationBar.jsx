@@ -61,12 +61,6 @@ const NavigationBar = (props) => {
                                 </div>
                             </div>
                         </li>
-                        <li className="nav-item nav-item-link">
-                            <Link to="/team" className="nav-link">
-                                Team
-                            </Link>
-
-                        </li>
                         <li className="nav-item nav-item-btn d-flex align-items-center">
                             <a className="btn fw-500 ms-lg-4 btn-lg btn-primary" href="#" onClick={() => props.setModalFeedbackShow(true)}>
                                 Feedback

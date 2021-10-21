@@ -10,6 +10,7 @@ import OtherEffect from './components/OtherEffect';
 import Sharpening from './components/Sharpening';
 import WatchModal from './components/WatchModal';
 import FeedbackModal from './components/FeedbackModal';
+import PageNotFound from './components/PageNotFound';
 import Team from './components/Team';
 
 
@@ -26,9 +27,6 @@ function App() {
               <Route exact path="/">
                 <Home></Home>
               </Route>
-              <Route exact path="/team">
-                <Team setModalFeedbackShow={setModalFeedbackShow}></Team>
-              </Route>
               <Route exact path="/noise-reduction">
                 <Reduction setModalShow={setModalShow} setModalFeedbackShow={setModalFeedbackShow}></Reduction>
               </Route>
@@ -41,6 +39,7 @@ function App() {
               <Route exact path="/others">
                 <OtherEffect setModalShow={setModalShow} setModalFeedbackShow={setModalFeedbackShow}></OtherEffect>
               </Route>
+              <Route component={PageNotFound} />
             </Switch>
           </AnimatePresence>
         </div>
